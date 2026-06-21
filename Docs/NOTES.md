@@ -96,7 +96,7 @@ F:\git\GrokUE_MCP\
 | 4 — Repeatable workflow | **Pass** | 2026-06-20 | Daily startup/shutdown checklist adopted |
 | 5 — Grow capabilities | **Pass** | 2026-06-20 | 20 toolsets; `health_check` live-verified from fresh Grok session |
 | 6 — Multi-client regression | **Pass** | 2026-06-20 | Cursor IDE agent: read + write tests; `grok mcp doctor` healthy |
-| 7 — Expand toolset coverage | **In progress** | 2026-06-20 | Batches F–O; `CaptureViewport` hitch; resume `PHASE7_PROGRESS.md` |
+| 7 — Expand toolset coverage | **In progress** | 2026-06-20 | Batches F–U; `CaptureViewport` workaround; resume `PHASE7_PROGRESS.md` |
 
 ---
 
@@ -176,11 +176,15 @@ Test actor: `PlayerStart` — refPath `/Temp/Untitled_1.Untitled_1:PersistentLev
 |---|------|--------|
 | M1 | `get_graph_dsl_docs` | **Pass** — returns S-expression DSL grammar for `write_graph_dsl` |
 
-### Batch N — CaptureViewport hitch (2026-06-20)
+### Batch N — CaptureViewport (2026-06-20)
 
 | # | Tool | Result |
 |---|------|--------|
 | N1 | `CaptureViewport` `{}` or `{"bShowUI": false}` | **Fail** — `captureTransform` needs a default value (optional in schema; binding rejects empty args) |
+| N2 | `CaptureViewport` with `captureTransform` from `GetCameraTransform` only | **Fail** — `annotations` also needs a default value |
+| N3 | `CaptureViewport` with `captureTransform` + minimal `annotations` + `bShowUI: false` | **Pass** — returns `image/png` base64 viewport capture (omit payload from docs) |
+
+**Workaround:** Call `GetCameraTransform` first, then pass both `captureTransform` and `annotations` explicitly. Minimal annotations that work: `gridSpacing: 0`, `gridExtent: 0`, `gridHeight: 0`, `maxLabelDistance: 0`, `classFilter: null`, `maxLabels: 0`.
 
 ### Batch O — ProgrammaticToolset (verified 2026-06-20)
 
@@ -200,8 +204,31 @@ Test actor: `PlayerStart` — refPath `/Temp/Untitled_1.Untitled_1:PersistentLev
 | # | Tool | Result |
 |---|------|--------|
 | Q1 | `get_lod_count` mesh `/Engine/BasicShapes/Cube.Cube` | **Pass** — `1` LOD |
+| Q2 | `is_nanite_enabled` Engine Cube | **Pass** — `false` |
+| Q3 | `get_bounds` Engine Cube | **Pass** — min (-50,-50,-50), max (50,50,50), `isValid: true` |
+| Q4 | `get_material_slots` Engine Cube | **Pass** — `["WorldGridMaterial"]` |
 
 **Note:** Static mesh `mesh.refPath` must include asset name (e.g. `.Cube`), not folder path alone.
+
+### Batch R — MaterialTools (catalog 2026-06-20)
+
+**Tool catalog (22 tools):** material/function/MPC creation, expression graph editing (add/delete/connect/layout), parameter groups, `recompile`, `get_referencing_materials`. All graph probes need a `/Game` Material asset — deferred.
+
+### Batch S — TextureTools (catalog 2026-06-20)
+
+**Tool catalog (2 tools):** `get_size` (read), `import_file` (write). Read probe deferred.
+
+### Batch T — DataTableTools (catalog 2026-06-20)
+
+**Tool catalog (10 tools):** `search_row_structs`, `create`, `import_file`, `get_schema`, `list_rows`, `add_rows`, `remove_rows`, `rename_rows`, `get_rows`, `set_rows`. No `/Game` DataTable yet — deferred.
+
+### Batch U — AgentSkillToolset (verified 2026-06-20)
+
+**Tool catalog (4 tools):** `ListSkills`, `GetSkills`, `CreateSkill`, `UpdateSkill`.
+
+| # | Tool | Result |
+|---|------|--------|
+| U1 | `ListSkills` | **Pass** — 4 built-in EditorToolset Python skills (BlueprintBasics, DefaultOutdoorLighting, MaterialBasics, UnrealSkillBestPractices) |
 
 **Next in queue:** see `Docs/PHASE7_PROGRESS.md`.
 
@@ -531,7 +558,7 @@ Editor restarts invalidate MCP session IDs. If Grok reports `Unknown session id`
 
 | Date | Issue | Resolution |
 |------|-------|------------|
-| 2026-06-20 | `CaptureViewport` — `{}` rejected; optional `captureTransform` lacks binding default | Pass explicit transform or wait for Epic fix; see Batch N |
+| 2026-06-20 | `CaptureViewport` — `{}` rejected; optional `captureTransform` and `annotations` lack binding defaults | Pass both explicitly from `GetCameraTransform` + minimal annotations; see Batch N |
 | 2026-06-20 | `GrokProjectTools` — dataclass return type broke `@unreal.uclass()` generation | Use `@unreal.ustruct()`; restart editor after fix |
 
 Use the template in [PLAN.md](PLAN.md) for additional failures.
@@ -542,6 +569,7 @@ Use the template in [PLAN.md](PLAN.md) for additional failures.
 
 | Date | Change |
 |------|--------|
+| 2026-06-20 | Phase 7 — StaticMesh read probes, CaptureViewport workaround, Material/Texture/DataTable/AgentSkill catalogs |
 | 2026-06-20 | Phase 7 — Batches J–O (Asset/Object/Blueprint/Programmatic); `CaptureViewport` hitch |
 | 2026-06-20 | **Phase 7 started** — `PHASE7_PROGRESS.md` checkpoint; Batches F–I; GrokProjectTools FAQ in handoff |
 | 2026-06-20 | **Phase 6 pass** — Cursor IDE regression (Batches D/E); `get_session_info` verified; multi-client table |

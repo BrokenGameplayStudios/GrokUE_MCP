@@ -2,8 +2,8 @@
 
 **Resume here.** Read this file only to know what to run next. Full results live in `Docs/NOTES.md` § Phase 7.
 
-**Last probe:** 2026-06-20 (Cursor session) — `StaticMeshTools.get_lod_count` Engine Cube  
-**Next probe:** `StaticMeshTools` — more read probes or `CaptureViewport` retry
+**Last probe:** 2026-06-20 (Cursor session) — `AgentSkillToolset.ListSkills`  
+**Next probe:** `BlueprintTools.create` under `/Game/Developers/` — **needs user OK**
 
 ## GrokProjectTools — no editor UI
 
@@ -78,7 +78,9 @@ Source: `Plugins/GrokUEMCPTools/Content/Python/grok_ue_mcp/toolsets/project_tool
 
 | ID | Tool | Result |
 |----|------|--------|
-| N1 | `CaptureViewport` | **Fail** — optional `captureTransform` binding |
+| N1 | `CaptureViewport` `{}` | **Fail** — `captureTransform` needs default |
+| N2 | `CaptureViewport` + camera only | **Fail** — `annotations` also needs default |
+| N3 | `CaptureViewport` + `captureTransform` + `annotations` | **Pass** — PNG base64; omit payload in docs |
 
 ### Batch O — ProgrammaticToolset
 
@@ -98,13 +100,34 @@ Source: `Plugins/GrokUEMCPTools/Content/Python/grok_ue_mcp/toolsets/project_tool
 | ID | Tool | Result |
 |----|------|--------|
 | Q1 | `get_lod_count` `/Engine/BasicShapes/Cube.Cube` | Pass — `1` |
+| Q2 | `is_nanite_enabled` Engine Cube | Pass — `false` |
+| Q3 | `get_bounds` Engine Cube | Pass — ±50 cm AABB |
+| Q4 | `get_material_slots` Engine Cube | Pass — `["WorldGridMaterial"]` |
+
+### Batch R — MaterialTools (catalog only)
+
+**Tool catalog (22 tools):** `create_material`, `create_function`, `create_parameter_collection`, `add_expression`, `delete_expression`, `get_expressions`, `layout_expressions`, `list_expression_classes`, `list_parameter_groups`, `rename_parameter_group`, `delete_parameter_group`, `get_expression_input_names`, `get_expression_output_names`, `connect_expressions`, `disconnect_expressions`, `get_expression_inputs`, `get_property_input`, `connect_to_output`, `disconnect_from_output`, `delete_unused_expressions`, `recompile`, `get_referencing_materials`. Needs `/Game` Material asset for probes — deferred.
+
+### Batch S — TextureTools (catalog only)
+
+**Tool catalog (2 tools):** `get_size`, `import_file`. Read probe deferred (no test Texture2D path picked).
+
+### Batch T — DataTableTools (catalog only)
+
+**Tool catalog (10 tools):** `search_row_structs`, `create`, `import_file`, `get_schema`, `list_rows`, `add_rows`, `remove_rows`, `rename_rows`, `get_rows`, `set_rows`. No `/Game` DataTable yet — deferred.
+
+### Batch U — AgentSkillToolset
+
+**Tool catalog (4 tools):** `ListSkills`, `GetSkills`, `CreateSkill`, `UpdateSkill` (write tools need user OK).
+
+| ID | Tool | Result |
+|----|------|--------|
+| U1 | `ListSkills` | Pass — 4 built-in EditorToolset Python skills |
 
 ## Queue — run in order (one MCP call at a time)
 
-1. `StaticMeshTools` — `is_nanite_enabled`, `get_bounds`, `get_material_slots` on Engine Cube
-2. `CaptureViewport` — retry with explicit `captureTransform` from F1 camera pose
-3. Blueprint write test — `BlueprintTools.create` under `/Game/Developers/` (needs user OK)
-4. Remaining toolsets: MaterialTools, TextureTools, DataTableTools, AgentSkillToolset (catalog only)
+1. Blueprint write test — `BlueprintTools.create` under `/Game/Developers/` (needs user OK)
+2. Optional: `TextureTools.get_size` on a known engine texture; `DataTableTools.search_row_structs`
 
 ## Skipped for now
 

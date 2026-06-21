@@ -26,7 +26,7 @@
 | `GetContentBrowserPath` | No args — e.g. `/Game` |
 | `IsPIERunning` | No args |
 | `CaptureAssetImage` | `assetPath` — PNG base64; don't log payload |
-| `CaptureViewport` | Optional annotations (large payload) |
+| `CaptureViewport` | Needs explicit `captureTransform` (from `GetCameraTransform`) **and** `annotations`; `bShowUI` optional — PNG base64 |
 
 ## Logs (`EditorToolset.LogsToolset`)
 
@@ -69,9 +69,10 @@ Write-only: `add_cube`, `add_sphere`, `add_cylinder`, `add_cone` — adds mesh c
 
 | Tool | Notes |
 |------|-------|
-| `get_lod_count` | `mesh.refPath` e.g. `/Engine/BasicShapes/Cube.Cube` |
-| `is_nanite_enabled` | Read |
-| `get_bounds` / `get_material_slots` | Read |
+| `get_lod_count` | `mesh.refPath` e.g. `/Engine/BasicShapes/Cube.Cube` → `1` |
+| `is_nanite_enabled` | Engine Cube → `false` |
+| `get_bounds` | Engine Cube → ±50 cm AABB |
+| `get_material_slots` | Engine Cube → `["WorldGridMaterial"]` |
 
 ## Blueprint (`editor_toolset.toolsets.blueprint.BlueprintTools`)
 
@@ -88,7 +89,27 @@ Write-only: `add_cube`, `add_sphere`, `add_cylinder`, `add_cone` — adds mesh c
 | `get_execution_environment` | Call once before scripting |
 | `execute_tool_script` | Python `run()` → dict; batch MCP calls |
 
-**Quirk:** `CaptureViewport` fails with `{}` — optional `captureTransform` binding issue (Batch N).
+## Material (`editor_toolset.toolsets.material.MaterialTools`)
+
+Graph editing for Materials/MaterialFunctions (22 tools). Needs `/Game` Material asset — catalog only so far.
+
+## Texture (`editor_toolset.toolsets.texture.TextureTools`)
+
+`get_size`, `import_file` — catalog only.
+
+## Data table (`editor_toolset.toolsets.data_table.DataTableTools`)
+
+`search_row_structs`, `create`, `list_rows`, `get_rows`, `set_rows`, etc. (10 tools) — catalog only.
+
+## Agent skills (`ToolsetRegistry.AgentSkillToolset`)
+
+| Tool | Notes |
+|------|-------|
+| `ListSkills` | No args — returns built-in EditorToolset Python skills |
+| `GetSkills` | `skillPaths` array |
+| `CreateSkill` / `UpdateSkill` | Write — needs user OK |
+
+**Quirk:** `CaptureViewport` fails with `{}` — pass explicit `captureTransform` + `annotations` (Batch N).
 
 ## Custom (`grok_ue_mcp.toolsets.project_tools.GrokProjectTools`)
 
