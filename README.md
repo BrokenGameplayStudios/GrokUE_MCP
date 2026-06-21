@@ -141,6 +141,7 @@ GrokUE_MCP/
 
 | Date | Update |
 |------|--------|
+| **2026-06-21** | **CAPABILITIES.md** — coverage disclaimer (not a full API list); editor restart via agent ❌ tested. |
 | **2026-06-21** | **[Docs/CAPABILITIES.md](Docs/CAPABILITIES.md)** — scannable “what Grok + MCP can do” summary linked from README. |
 | **2026-06-21** | **Phase 8 complete** — H2 Kenney web import (`scale_obj_to_ue_cm.py`, `--kenney-ue`); final screenshot `Docs/images/phase8-h2-kenney-imports-final.jpg`. |
 | **2026-06-20** | **Phase 8 H1** — material + DataTable + Blueprint `write_graph_dsl` + PIE prints. |
