@@ -2,21 +2,20 @@
 
 from __future__ import annotations
 
-import dataclasses
 import os
 
 import unreal
 import toolset_registry
 
 
-@dataclasses.dataclass
-class GrokSessionInfo:
+@unreal.ustruct()
+class GrokSessionInfo(unreal.StructBase):
     """Snapshot of project and level context for Grok health checks."""
 
-    project_name: str
-    project_dir: str
-    content_dir: str
-    current_level: str
+    project_name = unreal.uproperty(str)
+    project_dir = unreal.uproperty(str)
+    content_dir = unreal.uproperty(str)
+    current_level = unreal.uproperty(str)
 
 
 @unreal.uclass()
@@ -41,9 +40,8 @@ class GrokProjectTools(unreal.ToolsetDefinition):
         Returns:
             Project name, project root, content directory, and current level path.
         """
-        project_file = unreal.Paths.get_project_file_path()
-        project_name = os.path.splitext(os.path.basename(project_file))[0]
-        project_dir = os.path.dirname(project_file)
+        project_dir = unreal.Paths.project_dir()
+        project_name = os.path.basename(os.path.normpath(project_dir))
         content_dir = unreal.Paths.project_content_dir()
 
         les = unreal.get_editor_subsystem(unreal.LevelEditorSubsystem)
@@ -52,9 +50,9 @@ class GrokProjectTools(unreal.ToolsetDefinition):
             current_level.get_outermost().get_name() if current_level else ''
         )
 
-        return GrokSessionInfo(
-            project_name=project_name,
-            project_dir=project_dir,
-            content_dir=content_dir,
-            current_level=level_path,
-        )
+        info = GrokSessionInfo()
+        info.project_name = project_name
+        info.project_dir = project_dir
+        info.content_dir = content_dir
+        info.current_level = level_path
+        return info

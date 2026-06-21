@@ -75,11 +75,14 @@ Full integration test history: `Docs/NOTES.md` (Phase 3 Batches A/B/C).
 
 Python toolsets live in `Plugins/GrokUEMCPTools/Content/Python/`.
 
+**Structured return types** must use `@unreal.ustruct()` + `unreal.StructBase` + `unreal.uproperty()` — not Python `@dataclass`. Plain dataclasses break `@unreal.uclass()` generation at editor startup (see `Docs/NOTES.md` Phase 5 hitch).
+
 After editing toolset code:
 
-1. Run `ModelContextProtocol.RefreshTools` in the UE console (` key), **or** restart the editor.
-2. Re-handshake Grok MCP (`/mcps` → `r`).
-3. `list_toolsets` → confirm `grok_ue_mcp.toolsets.project_tools.GrokProjectTools` appears.
+1. If `init_unreal.py` failed (traceback in Output Log), **restart the editor** after fixing `.py` files.
+2. Otherwise run `ModelContextProtocol.RefreshTools` in the UE console (` key).
+3. Re-handshake Grok MCP (`/mcps` → `r`).
+4. `list_toolsets` → confirm `grok_ue_mcp.toolsets.project_tools.GrokProjectTools` appears.
 
 ---
 

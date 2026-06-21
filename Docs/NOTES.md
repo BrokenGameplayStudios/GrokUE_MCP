@@ -197,7 +197,7 @@ Not required for daily use. See PLAN.md § 4.3 if you want Grok inside the UE Te
 |-----------|--------|----------|
 | **AGENTS.md** | Done | Repo root — agent conventions for Grok + UE MCP |
 | **Grok skill** | Done | `.grok/skills/grok-ue-mcp/` — invoke via `/grok-ue-mcp` |
-| **Custom Python toolset** | Scaffolded | `Plugins/GrokUEMCPTools/` — `GrokProjectTools` with `health_check`, `get_session_info` |
+| **Custom Python toolset** | Fix applied | `Plugins/GrokUEMCPTools/` — failed on first load (see hitch); **restart required** to verify |
 | **CI / headless** | Not started | `-ModelContextProtocolStartServer` CLI flag (advanced) |
 
 ### Custom plugin: GrokUEMCPTools
@@ -222,6 +222,25 @@ New plugins need a full editor restart (not just `RefreshTools` on first enable)
 5. `call_tool` → `GrokProjectTools.health_check` → `GrokUE_MCP: custom toolset healthy`.
 
 If the toolset is missing after restart, run `ModelContextProtocol.RefreshTools` in the UE console and re-handshake Grok.
+
+**If `init_unreal.py` failed on startup** (Python traceback in Output Log), fix the `.py` files and **restart the editor** — `RefreshTools` does not re-run `init_unreal.py`.
+
+### Hitch: custom toolset failed to register (2026-06-20)
+
+**Symptom:** Plugin mounts (`LogPluginManager: Mounting Project plugin GrokUEMCPTools`) but toolset never appears; `list_toolsets` stays at 19.
+
+**Log (`Saved/Logs/GrokUE_MCP.log`):**
+
+```
+LogPython: Error: Failed to create return property (GrokSessionInfo) for function 'get_session_info'
+Exception: generate_class: Failed to generate an Unreal class for the Python type 'GrokProjectTools'
+```
+
+**Cause:** `get_session_info` returned a plain Python `@dataclass`. MCP tool return types must be **`@unreal.ustruct()`** classes extending `unreal.StructBase` with `unreal.uproperty()` fields — not stdlib `dataclasses`.
+
+**Fix:** Rewrote `GrokSessionInfo` as `@unreal.ustruct()`; populate via `info = GrokSessionInfo(); info.project_name = ...`.
+
+**Authoring rule for future tools:** See Epic's `toolset_registry/tests/demo_toolset.py` in the UE 5.8 install for the canonical `ustruct` / `tool_call` pattern.
 
 ---
 
@@ -256,7 +275,11 @@ Editor restarts invalidate MCP session IDs. If Grok reports `Unknown session id`
 
 ## Hitch Reports
 
-None filed yet. Use the template in [PLAN.md](PLAN.md) if a test fails.
+| Date | Issue | Resolution |
+|------|-------|------------|
+| 2026-06-20 | `GrokProjectTools` — dataclass return type broke `@unreal.uclass()` generation | Use `@unreal.ustruct()`; restart editor after fix |
+
+Use the template in [PLAN.md](PLAN.md) for additional failures.
 
 ---
 
@@ -264,6 +287,7 @@ None filed yet. Use the template in [PLAN.md](PLAN.md) if a test fails.
 
 | Date | Change |
 |------|--------|
+| 2026-06-20 | Hitch fix — `GrokSessionInfo` must be `@unreal.ustruct()`, not `@dataclass`; documented in Phase 5 |
 | 2026-06-20 | Phase 5 started — `AGENTS.md`, `/grok-ue-mcp` skill, `GrokUEMCPTools` plugin scaffolded |
 | 2026-06-20 | **Phase 4 pass** — adopted startup/shutdown checklist; health check verified (19 toolsets) |
 | 2026-06-20 | **Phase 3 complete** — Batch C pass; C3 screenshot (`phase3-c3-groktestcube-removed.jpg`); Phase 4 ready |
