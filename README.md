@@ -12,6 +12,8 @@ This repo is not a game prototype. It exists to document, test, and stabilize a 
 
 | Date | Update |
 |------|--------|
+| **2026-06-20** | **Phase 5 started** — `AGENTS.md`, `/grok-ue-mcp` skill, `GrokUEMCPTools` custom MCP plugin. |
+| **2026-06-20** | **Phase 4 pass** — repeatable startup/shutdown workflow adopted; health check documented in `Docs/NOTES.md`. |
 | **2026-06-20** | **Phase 3 complete** — Batches A/B/C verified (spawn, focus, remove cube with screenshots). See `Docs/NOTES.md`. |
 | **2026-06-20** | Phase 3 Batch A verified (screenshot); editor restart registers **19 toolsets** including `SceneTools`. Batch B scene tests ready. See `Docs/NOTES.md`. |
 | **2026-06-20** | Phase 2–3 started: Unreal MCP connected; Grok `/mcps` shows `unreal-mcp [ready]`. Batch A meta-tool tests pass. `EditorToolset` enabled in `.uproject`. |
@@ -26,23 +28,24 @@ This repo is not a game prototype. It exists to document, test, and stabilize a 
 
 | Area | Status |
 |------|--------|
-| **Integration phase** | Phase 3 **complete** — Phase 4 (repeatable workflow) next |
+| **Integration phase** | Phase 5 **in progress** — custom toolset verify after editor restart |
 | **Unreal project** | Blank Blueprint template, UE 5.8 |
 | **MCP server** | Epic **Unreal MCP** enabled; auto-start on `http://127.0.0.1:8000/mcp` |
 | **Grok config** | Project-scoped `.grok/config.toml`; `unreal-mcp` reports **ready** in `/mcps` |
-| **Next step** | Adopt Phase 4 daily session checklist in `Docs/PLAN.md` |
+| **Next step** | Restart UE → verify 20 toolsets + `GrokProjectTools.health_check` (see `Docs/NOTES.md` § Phase 5) |
 
 ### What works today
 
 - Grok connects to Unreal MCP over HTTP; meta-tools (`list_toolsets`, `describe_toolset`, `call_tool`) respond.
 - Scene inspection (`find_actors`, `get_current_level`) and light writes (spawn, focus viewport, remove actor) verified.
+- Repeatable daily session workflow (startup, health check, shutdown) in `Docs/NOTES.md` § Phase 4.
+- `AGENTS.md` agent conventions, `/grok-ue-mcp` project skill, `GrokUEMCPTools` plugin scaffolded.
 - Read-only AgentSkill queries work (empty project returns no skills).
-- Phase 3 test results and screenshots documented in `Docs/NOTES.md`.
 
 ### What does not work yet
 
-- No repeatable daily workflow adopted yet (Phase 4).
-- No custom project toolsets or gameplay content.
+- Custom `GrokProjectTools` not yet verified in editor (restart required after new plugin).
+- No gameplay content.
 
 ---
 
@@ -74,7 +77,10 @@ GrokUE_MCP/
 │   ├── NOTES.md          # Phase results, test batches, open questions
 │   └── images/           # Screenshots for documentation
 ├── .grok/
-│   └── config.toml       # Project-scoped Grok MCP server config
+│   ├── config.toml       # Project-scoped Grok MCP server config
+│   └── skills/grok-ue-mcp/  # Project skill: /grok-ue-mcp
+├── Plugins/GrokUEMCPTools/  # Custom Python MCP toolsets
+├── AGENTS.md             # Grok agent conventions for this project
 └── README.md             # This file
 ```
 

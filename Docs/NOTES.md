@@ -1,7 +1,7 @@
 # GrokUE_MCP — Integration Notes
 
 **Last updated:** 2026-06-20  
-**Current phase:** 4 — Repeatable workflow (Phase 3 complete)
+**Current phase:** 5 — Grow capabilities (AGENTS.md + skill + custom plugin scaffolded; editor verify pending)
 
 This file records what we verified, what failed, and answers to open questions from [PLAN.md](PLAN.md). Update it as each phase completes.
 
@@ -15,8 +15,8 @@ This file records what we verified, what failed, and answers to open questions f
 | 1 — Enable Unreal MCP | **Pass** | 2026-06-20 | Plugin enabled; auto-start on port 8000 |
 | 2 — Connect Grok | **Pass** | 2026-06-20 | `unreal-mcp` shows **ready** in `/mcps` |
 | 3 — First connection tests | **Pass** | 2026-06-20 | Batches A/B/C verified — spawn, focus, remove `GrokTestCube` end-to-end |
-| 4 — Repeatable workflow | **Ready** | 2026-06-20 | Adopt Phase 4 session checklist from `PLAN.md` |
-| 5 — Grow capabilities | Not started | — | — |
+| 4 — Repeatable workflow | **Pass** | 2026-06-20 | Daily startup/shutdown checklist adopted; health check returns 19 toolsets |
+| 5 — Grow capabilities | **In progress** | 2026-06-20 | `AGENTS.md`, `/grok-ue-mcp` skill, `GrokUEMCPTools` plugin — verify after editor restart |
 
 ---
 
@@ -142,6 +142,89 @@ Run only after Batch B passes. Verify in the UE viewport after each step.
 
 ---
 
+## Phase 4 — Repeatable Workflow (Adopted)
+
+Canonical reference: [PLAN.md § Phase 4](PLAN.md#phase-4--establish-a-repeatable-workflow).
+
+### Session startup (do this every time)
+
+| Step | Action | Notes |
+|------|--------|-------|
+| 1 | Open `GrokUE_MCP.uproject` | UE 5.8 editor |
+| 2 | Confirm MCP auto-started | Output Log → `Starting MCP server on port 8000` |
+| 3 | `cd F:\git\GrokUE_MCP` | Repo root (canonical path) |
+| 4 | Run `grok` | Project-scoped `.grok/config.toml` loads `unreal-mcp` |
+| 5 | `/mcps` → verify `unreal-mcp` **ready** | After editor restart: press **`r`** to re-handshake |
+| 6 | Health check (read-only) | Prompt: *"What MCP tools do you have from the unreal-mcp server?"* — expect 3 meta-tools; or call `list_toolsets` → expect **20 toolsets** (19 shipped + `GrokProjectTools`) |
+
+**Health check verified (2026-06-20):** `list_toolsets` returned 19 shipped toolsets. After `GrokUEMCPTools` plugin loads, expect **20** including `grok_ue_mcp.toolsets.project_tools.GrokProjectTools`.
+
+**Startup order:** Unreal Editor first → Grok second.
+
+### Session shutdown
+
+1. Close Grok normally.
+2. Save and close Unreal Editor (MCP server stops with the editor).
+
+### Quick health prompts (read-only)
+
+Use these anytime to confirm the bridge without modifying the level:
+
+| Prompt | Expected |
+|--------|----------|
+| "What MCP tools do you have from the unreal-mcp server?" | `list_toolsets`, `describe_toolset`, `call_tool` |
+| "Use the Unreal MCP to list available toolsets." | 20 toolsets (with custom plugin) |
+| `GrokProjectTools.health_check` | `GrokUE_MCP: custom toolset healthy` |
+| "What is the path of the currently loaded level?" | Level asset path (e.g. `/Temp/Untitled_1`) |
+
+Full write tests (spawn/focus/remove) live in Phase 3 Batch C — run only when you need to re-verify editor manipulation.
+
+### Optional — in-editor Terminal
+
+Not required for daily use. See PLAN.md § 4.3 if you want Grok inside the UE Terminal plugin (single-window workflow).
+
+### Constraints (carry forward)
+
+- **One MCP tool call at a time** — Epic serializes on the game thread.
+- **`find_actors`** requires `{"name": "", "tag": "", "collision_channels": []}` (empty `{}` fails).
+- **Editor restart** invalidates MCP session IDs → `/mcps` → `r` in Grok.
+
+---
+
+## Phase 5 — Grow Capabilities (In Progress)
+
+| Milestone | Status | Location |
+|-----------|--------|----------|
+| **AGENTS.md** | Done | Repo root — agent conventions for Grok + UE MCP |
+| **Grok skill** | Done | `.grok/skills/grok-ue-mcp/` — invoke via `/grok-ue-mcp` |
+| **Custom Python toolset** | Scaffolded | `Plugins/GrokUEMCPTools/` — `GrokProjectTools` with `health_check`, `get_session_info` |
+| **CI / headless** | Not started | `-ModelContextProtocolStartServer` CLI flag (advanced) |
+
+### Custom plugin: GrokUEMCPTools
+
+Enabled in `GrokUE_MCP.uproject`. Python entry: `Plugins/GrokUEMCPTools/Content/Python/init_unreal.py`.
+
+**Toolset:** `grok_ue_mcp.toolsets.project_tools.GrokProjectTools`
+
+| Tool | Purpose |
+|------|---------|
+| `health_check` | Confirms project toolset is registered |
+| `get_session_info` | Returns project name, dirs, current level path |
+
+### Verify after editor restart (required)
+
+New plugins need a full editor restart (not just `RefreshTools` on first enable):
+
+1. Restart Unreal Editor (or close/reopen `GrokUE_MCP.uproject`).
+2. Output Log → look for `Registering Toolset grok_ue_mcp.toolsets.project_tools.GrokProjectTools`.
+3. Grok `/mcps` → `r` to re-handshake.
+4. `list_toolsets` → **20** toolsets.
+5. `call_tool` → `GrokProjectTools.health_check` → `GrokUE_MCP: custom toolset healthy`.
+
+If the toolset is missing after restart, run `ModelContextProtocol.RefreshTools` in the UE console and re-handshake Grok.
+
+---
+
 ## Findings & Open Questions
 
 | # | Question | Answer so far |
@@ -181,6 +264,8 @@ None filed yet. Use the template in [PLAN.md](PLAN.md) if a test fails.
 
 | Date | Change |
 |------|--------|
+| 2026-06-20 | Phase 5 started — `AGENTS.md`, `/grok-ue-mcp` skill, `GrokUEMCPTools` plugin scaffolded |
+| 2026-06-20 | **Phase 4 pass** — adopted startup/shutdown checklist; health check verified (19 toolsets) |
 | 2026-06-20 | **Phase 3 complete** — Batch C pass; C3 screenshot (`phase3-c3-groktestcube-removed.jpg`); Phase 4 ready |
 | 2026-06-20 | C2 pass + screenshot (`phase3-c2-focus-on-groktestcube.jpg`); C3 `remove_from_scene` returned true |
 | 2026-06-20 | C1 pass + screenshot (`phase3-c1-groktestcube-spawned.jpg`); C2 `FocusOnActors` invoked |

@@ -1,0 +1,15 @@
+{
+	"FileVersion": 3,
+	"Version": 1,
+	"VersionName": "1.0",
+	"FriendlyName": "GrokUE MCP Tools",
+	"Description": "Project-specific Python MCP toolsets for the GrokUE_MCP integration workspace.",
+	"Category": "Other",
+	"CreatedBy": "Broken Gameplay Studios",
+	"CreatedByURL": "https://github.com/BrokenGameplayStudios",
+	"CanContainContent": true,
+	"IsBetaVersion": true,
+	"Installed": false,
+	"EnabledByDefault": true,
+	"Modules": []
+}

@@ -22,6 +22,10 @@
 		{
 			"Name": "EditorToolset",
 			"Enabled": true
+		},
+		{
+			"Name": "GrokUEMCPTools",
+			"Enabled": true
 		}
 	]
 }

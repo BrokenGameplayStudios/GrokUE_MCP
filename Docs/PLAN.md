@@ -1,6 +1,6 @@
 # GrokUE_MCP — Integration Plan
 
-**Status:** Phase 3 — First connection tests (Batch A pass; see `Docs/NOTES.md`)  
+**Status:** Phase 5 — Grow capabilities (`AGENTS.md`, skill, custom plugin; see `Docs/NOTES.md`)  
 **Last updated:** 2026-06-20  
 **Directed by:** Grok (Broken Gameplay Studios workflow)
 
