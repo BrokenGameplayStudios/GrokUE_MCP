@@ -2,8 +2,8 @@
 
 **Resume here.** Read this file only to know what to run next. Full results live in `Docs/NOTES.md` § Phase 7.
 
-**Last probe:** 2026-06-20 — `StringTableTools` create + entry probes on `ST_GrokPhase7Test`  
-**Next probe:** optional `DataAssetTools.create` or `DataTableTools.create` in `/Game/MCPTest/`; Phase 7 wrap-up
+**Last probe:** 2026-06-20 — `DataTableTools` create + row probes on `DT_GrokPhase7Test`  
+**Next probe:** Phase 7 wrap-up (mark complete)
 
 ## GrokProjectTools — no editor UI
 
@@ -220,11 +220,34 @@ Source: `Plugins/GrokUEMCPTools/Content/Python/grok_ue_mcp/toolsets/project_tool
 
 **Test asset:** `/Game/MCPTest/ST_GrokPhase7Test`
 
+### Batch AE — DataAssetTools (verified 2026-06-20)
+
+| ID | Tool | Result |
+|----|------|--------|
+| AE1 | `create` `asset_type: PrimaryDataAsset` | Pass in-memory — **`save_assets` → false** (abstract type) |
+| AE2 | `create` `asset_type: /Script/EnhancedInput.InputAction` → `DA_GrokPhase7Test_InputAction` | Pass — + `save_assets` |
+| AE3 | `get_asset_class` | Pass — `InputAction` |
+
+**Hitch:** `asset_type` must be a **concrete** DataAsset subclass; abstract bases (`DataAsset`, `PrimaryDataAsset`) return refPath but won't persist.
+
+**Test asset:** `/Game/MCPTest/DA_GrokPhase7Test_InputAction`
+
+### Batch AF — DataTableTools write (verified 2026-06-20)
+
+| ID | Tool | Result |
+|----|------|--------|
+| AF1 | `create` schema `MirrorTableRow` → `DT_GrokPhase7Test` | Pass — + `save_assets` |
+| AF2 | `list_rows` (empty) | Pass — `[]` |
+| AF3 | `get_schema` | Pass — `name`, `mirroredName`, `mirrorEntryType`, `bEnabled` |
+| AF4 | `add_rows` `GrokRow1` | Pass |
+| AF5 | `get_rows` | Pass — defaults (`mirrorEntryType: Bone`, `bEnabled: true`) |
+| AF6 | `set_rows` `mirroredName: GrokMirror`, `bEnabled: false` | Pass — round-trip via `get_rows` |
+
+**Test asset:** `/Game/MCPTest/DT_GrokPhase7Test`
+
 ## Queue — run in order (one MCP call at a time)
 
-1. Optional: `DataAssetTools.create` in `/Game/MCPTest/`
-2. Optional: `DataTableTools.create` (needs row struct from `search_row_structs`)
-3. Phase 7 wrap-up — mark complete when optional probes done or skipped
+1. Phase 7 wrap-up — mark complete in `NOTES.md` phase table + handoff
 
 ## Skipped for now
 

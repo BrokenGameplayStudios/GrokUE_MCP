@@ -278,7 +278,28 @@ Test actor: `PlayerStart` — refPath `/Temp/Untitled_1.Untitled_1:PersistentLev
 | AD6 | `get_entry` | **Pass** — round-trip value |
 | AD7 | `list_keys` (after set) | **Pass** — `["GrokHello"]` |
 
-**Test asset folder:** `/Game/MCPTest/` — `BP_GrokPhase7Test`, `M_GrokPhase7Test`, `M_GrokPhase7Test_Inst`, `M_GrokPhase7Test_MCP`, `LinearCurveTable_GrokPhase7Test`, `ST_GrokPhase7Test`.
+### Batch AE — DataAssetTools (verified 2026-06-20)
+
+| # | Tool | Result |
+|---|------|--------|
+| AE1 | `create` `asset_type: /Script/Engine.PrimaryDataAsset` | **Pass in-memory** — `save_assets` → `false` (abstract type) |
+| AE2 | `create` `asset_type: /Script/EnhancedInput.InputAction` → `DA_GrokPhase7Test_InputAction` | **Pass** — + `save_assets` |
+| AE3 | `get_asset_class` | **Pass** — `InputAction` |
+
+**Hitch:** `asset_type` must be a concrete DataAsset subclass. Abstract bases (`DataAsset`, `PrimaryDataAsset`) return refPath but do not persist.
+
+### Batch AF — DataTableTools write (verified 2026-06-20)
+
+| # | Tool | Result |
+|---|------|--------|
+| AF1 | `create` schema `/Script/Engine.MirrorTableRow` → `DT_GrokPhase7Test` | **Pass** — + `save_assets` |
+| AF2 | `list_rows` (empty) | **Pass** — `[]` |
+| AF3 | `get_schema` | **Pass** — JSON schema with enum `mirrorEntryType` |
+| AF4 | `add_rows` `GrokRow1` | **Pass** |
+| AF5 | `get_rows` | **Pass** — default row values |
+| AF6 | `set_rows` | **Pass** — `mirroredName: GrokMirror`, `bEnabled: false` |
+
+**Test asset folder:** `/Game/MCPTest/` — `BP_GrokPhase7Test`, `M_GrokPhase7Test`, `M_GrokPhase7Test_Inst`, `M_GrokPhase7Test_MCP`, `LinearCurveTable_GrokPhase7Test`, `ST_GrokPhase7Test`, `DA_GrokPhase7Test_InputAction`, `DT_GrokPhase7Test`.
 
 ### Batch N — CaptureViewport (2026-06-20)
 
@@ -663,6 +684,7 @@ Editor restarts invalidate MCP session IDs. If Grok reports `Unknown session id`
 | Date | Issue | Resolution |
 |------|-------|------------|
 | 2026-06-20 | `/Game/Developers/` assets invisible in Content Browser | Enable **Show Developers Content**, or create under `/Game/<Folder>/` (e.g. `MCPTest`); see Batch V |
+| 2026-06-20 | `DataAssetTools.create` with abstract `asset_type` (`DataAsset`, `PrimaryDataAsset`) | `save_assets` returns `false`; use a concrete subclass (e.g. `/Script/EnhancedInput.InputAction`); see Batch AE |
 | 2026-06-20 | `BlueprintTools.create` — returns refPath but no `.uasset` until `save_assets` | Call `AssetTools.save_assets` immediately after create; see Batch V |
 | 2026-06-20 | `CaptureViewport` — `{}` rejected; optional `captureTransform` and `annotations` lack binding defaults | Pass both explicitly from `GetCameraTransform` + minimal annotations; see Batch N |
 | 2026-06-20 | `GrokProjectTools` — dataclass return type broke `@unreal.uclass()` generation | Use `@unreal.ustruct()`; restart editor after fix |
@@ -675,6 +697,7 @@ Use the template in [PLAN.md](PLAN.md) for additional failures.
 
 | Date | Change |
 |------|--------|
+| 2026-06-20 | Phase 7 Batches AE/AF — DataAssetTools (InputAction), DataTableTools create + rows |
 | 2026-06-20 | Phase 7 Batch AD — StringTableTools create + entry probes; AB2 EditorStartupMap confirmed |
 | 2026-06-20 | Phase 7 AB/AC — `L_Grok` test level, EditorStartupMap, CurveTable/MaterialInstance probes |
 | 2026-06-20 | Phase 7 Batches R/Z/AA — Material create, Blueprint spawn, remaining toolset catalogs |

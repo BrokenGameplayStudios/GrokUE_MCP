@@ -150,7 +150,19 @@ Write-only: `add_cube`, `add_sphere`, `add_cylinder`, `add_cone` — adds mesh c
 
 ## Data asset (`editor_toolset.toolsets.data_asset.DataAssetTools`)
 
-Catalog — `create` only; not yet probed in `/Game/MCPTest/`.
+| Tool | Notes |
+|------|-------|
+| `create` | `folder_path`, `asset_name`, `asset_type.refPath` — then **`save_assets`** |
+| | `asset_type` must be a **concrete** subclass (e.g. `/Script/EnhancedInput.InputAction`); abstract `PrimaryDataAsset` won't save |
+
+## Data table (`editor_toolset.toolsets.data_table.DataTableTools`)
+
+| Tool | Notes |
+|------|-------|
+| `search_row_structs` | `struct_name: "*"` — pick a `TableRowBase` struct |
+| `create` | `folder_path`, `asset_name`, `schema.refPath` — then **`save_assets`** |
+| `list_rows` / `get_schema` / `get_rows` | `data_table.refPath` |
+| `add_rows` / `set_rows` | `set_rows` takes `values` as JSON **string** — then **`save_assets`** |
 
 ## Skeletal mesh (`editor_toolset.toolsets.skeletal_mesh.SkeletalMeshTools`)
 
