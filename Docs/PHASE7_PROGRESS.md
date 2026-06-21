@@ -133,10 +133,11 @@ Source: `Plugins/GrokUEMCPTools/Content/Python/grok_ue_mcp/toolsets/project_tool
 | V3 | `list_graphs` | Pass — `EventGraph`, `UserConstructionScript` |
 | V4 | `save_assets` then `move` → `/Game/Developers/Brian/` | Pass on disk — CB still empty |
 | V5 | `move` → `/Game/MCPTest/` + `SetContentBrowserPath` | Pass — visible in normal content path |
+| V6 | User visual confirm | Pass — screenshot `Docs/images/phase7-v1-bp-grokphase7test-mcptest.jpg` |
 
 **Hitches:** (1) `create` needs `save_assets`. (2) `/Game/Developers/` hidden from Content Browser unless **Show Developers Content** enabled.
 
-**Test asset:** `/Game/MCPTest/BP_GrokPhase7Test`
+**Test asset:** `/Game/MCPTest/BP_GrokPhase7Test` — user-confirmed
 
 ## Queue — run in order (one MCP call at a time)
 

@@ -186,13 +186,16 @@ Test actor: `PlayerStart` — refPath `/Temp/Untitled_1.Untitled_1:PersistentLev
 | V4 | `save_assets` | `asset_paths: ["/Game/Developers/BP_GrokPhase7Test"]` | **Pass** — writes `Content/Developers/BP_GrokPhase7Test.uasset` |
 | V5 | `move` | → `/Game/Developers/Brian/BP_GrokPhase7Test` | **Pass on disk** — Content Browser still empty (Developers folder hidden) |
 | V6 | `move` | → `/Game/MCPTest/BP_GrokPhase7Test` + `save_assets` | **Pass** — `SetContentBrowserPath` navigates to `/Game/MCPTest` |
+| V7 | User visual confirm | Content Browser + Blueprint editor | **Pass** — asset in `/Game/MCPTest/`, parent Actor, default EventGraph (screenshot below) |
+
+![Batch V — BP_GrokPhase7Test in Content Browser and Blueprint editor](images/phase7-v1-bp-grokphase7test-mcptest.jpg)
 
 **Hitches:**
 - `BlueprintTools.create` does not persist to disk — call `AssetTools.save_assets` immediately after.
 - Assets under `/Game/Developers/` may exist on disk and in the asset registry but **Content Browser hides them** unless **View Options → Show Developers Content** is enabled. `SetContentBrowserPath` to Developers paths fails (snaps back to `/Game`).
 - For MCP test assets, use a normal content path like `/Game/MCPTest/`.
 
-**Test asset:** `/Game/MCPTest/BP_GrokPhase7Test` — should appear after Content Browser navigates to `MCPTest`.
+**Test asset:** `/Game/MCPTest/BP_GrokPhase7Test` — user-confirmed in Content Browser and Blueprint editor (2026-06-20).
 
 ### Batch N — CaptureViewport (2026-06-20)
 
@@ -589,6 +592,7 @@ Use the template in [PLAN.md](PLAN.md) for additional failures.
 
 | Date | Change |
 |------|--------|
+| 2026-06-20 | Phase 7 Batch V screenshot — `BP_GrokPhase7Test` user-confirmed in `/Game/MCPTest/` |
 | 2026-06-20 | Phase 7 — Blueprint write test (`BP_GrokPhase7Test` in `/Game/Developers/`) |
 | 2026-06-20 | Phase 7 — StaticMesh read probes, CaptureViewport workaround, Material/Texture/DataTable/AgentSkill catalogs |
 | 2026-06-20 | Phase 7 — Batches J–O (Asset/Object/Blueprint/Programmatic); `CaptureViewport` hitch |
