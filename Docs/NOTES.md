@@ -252,7 +252,7 @@ Test actor: `PlayerStart` — refPath `/Temp/Untitled_1.Untitled_1:PersistentLev
 | # | Item | Result |
 |---|------|--------|
 | AB1 | User saved `/Game/Maps/L_Grok` | **Pass** — `get_session_info.current_level` matches |
-| AB2 | `EditorStartupMap` + `GameDefaultMap` in `Config/DefaultEngine.ini` | Set to `/Game/Maps/L_Grok` — verify after **editor restart** |
+| AB2 | `EditorStartupMap` + `GameDefaultMap` in `Config/DefaultEngine.ini` | **Pass** — user confirmed editor opens `/Game/Maps/L_Grok` after restart |
 | AB3 | No MCP path to project Config | `AssetTools.read_file` only allows `/Game/`, plugins, `Saved/` |
 
 ### Batch AC — `/Game/MCPTest/` assets (verified 2026-06-20)
@@ -266,7 +266,19 @@ Test actor: `PlayerStart` — refPath `/Temp/Untitled_1.Untitled_1:PersistentLev
 
 **StaticMeshTools (additional):** `get_triangle_count` Engine Cube → **48** triangles.
 
-**Test asset folder:** `/Game/MCPTest/` — `BP_GrokPhase7Test`, `M_GrokPhase7Test`, `M_GrokPhase7Test_Inst`, `M_GrokPhase7Test_MCP`, `LinearCurveTable_GrokPhase7Test`.
+### Batch AD — StringTableTools (verified 2026-06-20)
+
+| # | Tool | Result |
+|---|------|--------|
+| AD1 | `create` → `/Game/MCPTest/ST_GrokPhase7Test` | **Pass** — + `save_assets` (same hitch as Blueprint/Material create) |
+| AD2 | `list_keys` (empty) | **Pass** — `[]` |
+| AD3 | `get_namespace` | **Pass** — `ST_GrokPhase7Test` |
+| AD4 | `get_table_id` | **Pass** — `/Game/MCPTest/ST_GrokPhase7Test.ST_GrokPhase7Test` |
+| AD5 | `set_entry` `GrokHello` → `Hello from Phase 7 MCP` | **Pass** |
+| AD6 | `get_entry` | **Pass** — round-trip value |
+| AD7 | `list_keys` (after set) | **Pass** — `["GrokHello"]` |
+
+**Test asset folder:** `/Game/MCPTest/` — `BP_GrokPhase7Test`, `M_GrokPhase7Test`, `M_GrokPhase7Test_Inst`, `M_GrokPhase7Test_MCP`, `LinearCurveTable_GrokPhase7Test`, `ST_GrokPhase7Test`.
 
 ### Batch N — CaptureViewport (2026-06-20)
 
@@ -663,6 +675,7 @@ Use the template in [PLAN.md](PLAN.md) for additional failures.
 
 | Date | Change |
 |------|--------|
+| 2026-06-20 | Phase 7 Batch AD — StringTableTools create + entry probes; AB2 EditorStartupMap confirmed |
 | 2026-06-20 | Phase 7 AB/AC — `L_Grok` test level, EditorStartupMap, CurveTable/MaterialInstance probes |
 | 2026-06-20 | Phase 7 Batches R/Z/AA — Material create, Blueprint spawn, remaining toolset catalogs |
 | 2026-06-20 | Phase 7 Batches W–Y — TextureTools, DataTableTools, Blueprint graph read probes |

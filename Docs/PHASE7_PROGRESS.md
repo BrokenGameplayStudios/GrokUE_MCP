@@ -2,8 +2,8 @@
 
 **Resume here.** Read this file only to know what to run next. Full results live in `Docs/NOTES.md` § Phase 7.
 
-**Last probe:** 2026-06-20 — `CurveTableTools.add_key`; `DefaultEngine.ini` EditorStartupMap → `L_Grok`  
-**Next probe:** restart UE → confirm editor opens `L_Grok`; optional StringTable create
+**Last probe:** 2026-06-20 — `StringTableTools` create + entry probes on `ST_GrokPhase7Test`  
+**Next probe:** optional `DataAssetTools.create` or `DataTableTools.create` in `/Game/MCPTest/`; Phase 7 wrap-up
 
 ## GrokProjectTools — no editor UI
 
@@ -192,7 +192,7 @@ Source: `Plugins/GrokUEMCPTools/Content/Python/grok_ue_mcp/toolsets/project_tool
 | ID | Item | Result |
 |----|------|--------|
 | AB1 | User saved map → `/Game/Maps/L_Grok` | Pass — `get_session_info` / `get_current_level` agree |
-| AB2 | `Config/DefaultEngine.ini` `EditorStartupMap` + `GameDefaultMap` | Set to `/Game/Maps/L_Grok` — **restart UE to verify** |
+| AB2 | `Config/DefaultEngine.ini` `EditorStartupMap` + `GameDefaultMap` | **Pass** — user confirmed editor opens `L_Grok` after restart |
 | AB3 | MCP cannot set maps via tool | `AssetTools.read_file` rejects `Config/`; ini edit in repo is the workflow |
 
 **Canonical test level:** `/Game/Maps/L_Grok` (`Content/Maps/L_Grok.umap`)
@@ -206,10 +206,25 @@ Source: `Plugins/GrokUEMCPTools/Content/Python/grok_ue_mcp/toolsets/project_tool
 | AC3 | User `M_GrokPhase7Test_Inst` — `get_asset_class` | Pass — `MaterialInstanceConstant`; `list_parameters` → `[]` |
 | AC4 | `MaterialInstanceTools.create` → `M_GrokPhase7Test_MCP` | Pass — + `save_assets` |
 
+### Batch AD — StringTableTools (verified 2026-06-20)
+
+| ID | Tool | Result |
+|----|------|--------|
+| AD1 | `create` → `/Game/MCPTest/ST_GrokPhase7Test` | Pass — + `save_assets` (same hitch as Blueprint/Material create) |
+| AD2 | `list_keys` (empty table) | Pass — `[]` |
+| AD3 | `get_namespace` | Pass — `ST_GrokPhase7Test` |
+| AD4 | `get_table_id` | Pass — `/Game/MCPTest/ST_GrokPhase7Test.ST_GrokPhase7Test` |
+| AD5 | `set_entry` key `GrokHello` | Pass |
+| AD6 | `get_entry` | Pass — `Hello from Phase 7 MCP` |
+| AD7 | `list_keys` (after set) | Pass — `["GrokHello"]` |
+
+**Test asset:** `/Game/MCPTest/ST_GrokPhase7Test`
+
 ## Queue — run in order (one MCP call at a time)
 
-1. **Restart UE** → confirm editor opens `L_Grok` (EditorStartupMap)
-2. Optional: `StringTableTools.create` in `/Game/MCPTest/`
+1. Optional: `DataAssetTools.create` in `/Game/MCPTest/`
+2. Optional: `DataTableTools.create` (needs row struct from `search_row_structs`)
+3. Phase 7 wrap-up — mark complete when optional probes done or skipped
 
 ## Skipped for now
 

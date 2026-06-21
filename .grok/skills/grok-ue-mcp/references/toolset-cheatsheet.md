@@ -139,9 +139,18 @@ Write-only: `add_cube`, `add_sphere`, `add_cylinder`, `add_cone` — adds mesh c
 | `create` | `folder_path`, `asset_name`, `parent.refPath` — then **`save_assets`** |
 | `list_parameters` | On empty parent material → `[]` |
 
-## Data asset / String table
+## String table (`editor_toolset.toolsets.string_table.StringTableTools`)
 
-Catalog — `DataAssetTools.create`; `StringTableTools` entry tools; assets under `/Game/MCPTest/`.
+| Tool | Notes |
+|------|-------|
+| `create` | `folder_path`, `asset_name` — then **`save_assets`** |
+| `list_keys` | `string_table.refPath` |
+| `get_namespace` / `get_table_id` | Namespace = asset name; table ID = full refPath |
+| `set_entry` / `get_entry` | `key`, `value` — then **`save_assets`** |
+
+## Data asset (`editor_toolset.toolsets.data_asset.DataAssetTools`)
+
+Catalog — `create` only; not yet probed in `/Game/MCPTest/`.
 
 ## Skeletal mesh (`editor_toolset.toolsets.skeletal_mesh.SkeletalMeshTools`)
 
