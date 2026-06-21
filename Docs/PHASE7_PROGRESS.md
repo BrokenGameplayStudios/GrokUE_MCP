@@ -2,8 +2,8 @@
 
 **Resume here.** Read this file only to know what to run next. Full results live in `Docs/NOTES.md` § Phase 7.
 
-**Last probe:** 2026-06-20 — catalog CurveTable/DataAsset/SkeletalMesh/StringTable toolsets  
-**Next probe:** optional — MaterialInstance create, CurveTable create, remove `GrokPhase7TestActor` from level
+**Last probe:** 2026-06-20 — `CurveTableTools.add_key`; `DefaultEngine.ini` EditorStartupMap → `L_Grok`  
+**Next probe:** restart UE → confirm editor opens `L_Grok`; optional StringTable create
 
 ## GrokProjectTools — no editor UI
 
@@ -170,8 +170,8 @@ Source: `Plugins/GrokUEMCPTools/Content/Python/grok_ue_mcp/toolsets/project_tool
 
 | ID | Tool | Result |
 |----|------|--------|
-| Z1 | `add_to_scene_from_asset` `BP_GrokPhase7Test` → `GrokPhase7TestActor` | Pass — at (200,0,100); confirm in Outliner/viewport |
-| Z2 | `find_actors` filter `GrokPhase7TestActor` | Pass — refPath returned |
+| Z1 | `add_to_scene_from_asset` `BP_GrokPhase7Test` → `GrokPhase7TestActor` | Pass — user confirmed in viewport |
+| Z2 | `find_actors` filter `GrokPhase7TestActor` | Pass — persists in `/Game/Maps/L_Grok` |
 
 ### Batch AA — Remaining toolsets (catalog 2026-06-20)
 
@@ -187,11 +187,29 @@ Source: `Plugins/GrokUEMCPTools/Content/Python/grok_ue_mcp/toolsets/project_tool
 |----|------|--------|
 | AA1 | `MaterialInstanceTools.list_parameters` on `M_GrokPhase7Test` | Pass — `[]` (no parameters on empty material) |
 
+### Batch AB — Testing level `L_Grok` (verified 2026-06-20)
+
+| ID | Item | Result |
+|----|------|--------|
+| AB1 | User saved map → `/Game/Maps/L_Grok` | Pass — `get_session_info` / `get_current_level` agree |
+| AB2 | `Config/DefaultEngine.ini` `EditorStartupMap` + `GameDefaultMap` | Set to `/Game/Maps/L_Grok` — **restart UE to verify** |
+| AB3 | MCP cannot set maps via tool | `AssetTools.read_file` rejects `Config/`; ini edit in repo is the workflow |
+
+**Canonical test level:** `/Game/Maps/L_Grok` (`Content/Maps/L_Grok.umap`)
+
+### Batch AC — User + MCP assets in `/Game/MCPTest/` (verified 2026-06-20)
+
+| ID | Tool / asset | Result |
+|----|--------------|--------|
+| AC1 | User `LinearCurveTable_GrokPhase7Test` — `list_rows` | Pass — `["Curve"]` |
+| AC2 | `add_key` + `get_keys` on `Curve` row | Pass — `(0, 0)` + `save_assets` |
+| AC3 | User `M_GrokPhase7Test_Inst` — `get_asset_class` | Pass — `MaterialInstanceConstant`; `list_parameters` → `[]` |
+| AC4 | `MaterialInstanceTools.create` → `M_GrokPhase7Test_MCP` | Pass — + `save_assets` |
+
 ## Queue — run in order (one MCP call at a time)
 
-1. User confirm `GrokPhase7TestActor` in Outliner/viewport
-2. Optional: `MaterialInstanceTools.create` from `M_GrokPhase7Test`; `CurveTableTools.create` in `/Game/MCPTest/`
-3. Optional cleanup: `SceneTools.remove_from_scene` on spawned actor
+1. **Restart UE** → confirm editor opens `L_Grok` (EditorStartupMap)
+2. Optional: `StringTableTools.create` in `/Game/MCPTest/`
 
 ## Skipped for now
 

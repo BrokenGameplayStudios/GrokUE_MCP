@@ -19,6 +19,7 @@ This file records what we verified, what failed, and answers to open questions f
 | Grok from repo root? | `cd F:\git\GrokUE_MCP` → `grok` |
 | MCP ready? | `/mcps` → `unreal-mcp` **[ready]** — press **`r`** after any editor restart |
 | Health check | `call_tool` → `GrokProjectTools.health_check` → `GrokUE_MCP: custom toolset healthy` |
+| Test level | **`/Game/Maps/L_Grok`** — EditorStartupMap in `Config/DefaultEngine.ini` (restart UE after pull) |
 
 ![Health check from a fresh Grok session](images/phase5-health-check-grok-session.jpg)
 
@@ -33,7 +34,7 @@ This file records what we verified, what failed, and answers to open questions f
 | 4 | Daily startup/shutdown workflow adopted |
 | 5 | `AGENTS.md`, `/grok-ue-mcp` skill, custom `GrokUEMCPTools` plugin (**20 toolsets**) |
 | 6 | Cursor IDE re-confirmed Phase 3 results (no new capability; see Phase 6) |
-| 7 | **In progress** — read-only probes on Logs, EditorApp, ActorTools (see Phase 7) |
+| 7 | **In progress** — toolset coverage + test level `L_Grok` (see Phase 7) |
 
 ### GrokProjectTools — what it is (no editor window)
 
@@ -229,8 +230,8 @@ Test actor: `PlayerStart` — refPath `/Temp/Untitled_1.Untitled_1:PersistentLev
 
 | # | Tool | Result |
 |---|------|--------|
-| Z1 | `add_to_scene_from_asset` `/Game/MCPTest/BP_GrokPhase7Test` → `GrokPhase7TestActor` at (200,0,100) | **Pass** — MCP refPath returned; **user viewport confirm pending** |
-| Z2 | `find_actors` `name: GrokPhase7TestActor` | **Pass** |
+| Z1 | `add_to_scene_from_asset` `/Game/MCPTest/BP_GrokPhase7Test` → `GrokPhase7TestActor` at (200,0,100) | **Pass** — user confirmed in viewport |
+| Z2 | `find_actors` `name: GrokPhase7TestActor` | **Pass** — actor in saved level `/Game/Maps/L_Grok` |
 
 ### Batch AA — Remaining toolsets (catalog 2026-06-20)
 
@@ -246,7 +247,26 @@ Test actor: `PlayerStart` — refPath `/Temp/Untitled_1.Untitled_1:PersistentLev
 |---|------|--------|
 | AA1 | `MaterialInstanceTools.list_parameters` on `M_GrokPhase7Test` | **Pass** — `[]` |
 
+### Batch AB — Testing level `L_Grok` (verified 2026-06-20)
+
+| # | Item | Result |
+|---|------|--------|
+| AB1 | User saved `/Game/Maps/L_Grok` | **Pass** — `get_session_info.current_level` matches |
+| AB2 | `EditorStartupMap` + `GameDefaultMap` in `Config/DefaultEngine.ini` | Set to `/Game/Maps/L_Grok` — verify after **editor restart** |
+| AB3 | No MCP path to project Config | `AssetTools.read_file` only allows `/Game/`, plugins, `Saved/` |
+
+### Batch AC — `/Game/MCPTest/` assets (verified 2026-06-20)
+
+| # | Tool / asset | Result |
+|---|--------------|--------|
+| AC1 | User `LinearCurveTable_GrokPhase7Test` — `list_rows` | **Pass** — `["Curve"]` |
+| AC2 | `add_key` / `get_keys` on `Curve` | **Pass** — key `(time:0, value:0)` + `save_assets` |
+| AC3 | User `M_GrokPhase7Test_Inst` | **Pass** — `MaterialInstanceConstant`; `list_parameters` → `[]` |
+| AC4 | `MaterialInstanceTools.create` → `M_GrokPhase7Test_MCP` | **Pass** — + `save_assets` |
+
 **StaticMeshTools (additional):** `get_triangle_count` Engine Cube → **48** triangles.
+
+**Test asset folder:** `/Game/MCPTest/` — `BP_GrokPhase7Test`, `M_GrokPhase7Test`, `M_GrokPhase7Test_Inst`, `M_GrokPhase7Test_MCP`, `LinearCurveTable_GrokPhase7Test`.
 
 ### Batch N — CaptureViewport (2026-06-20)
 
@@ -643,6 +663,7 @@ Use the template in [PLAN.md](PLAN.md) for additional failures.
 
 | Date | Change |
 |------|--------|
+| 2026-06-20 | Phase 7 AB/AC — `L_Grok` test level, EditorStartupMap, CurveTable/MaterialInstance probes |
 | 2026-06-20 | Phase 7 Batches R/Z/AA — Material create, Blueprint spawn, remaining toolset catalogs |
 | 2026-06-20 | Phase 7 Batches W–Y — TextureTools, DataTableTools, Blueprint graph read probes |
 | 2026-06-20 | Phase 7 Batch V screenshot — `BP_GrokPhase7Test` user-confirmed in `/Game/MCPTest/` |

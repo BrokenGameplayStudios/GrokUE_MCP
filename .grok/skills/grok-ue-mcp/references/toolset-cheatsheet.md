@@ -10,7 +10,8 @@
 
 | Tool | Notes |
 |------|-------|
-| `get_current_level` | No args |
+| `get_current_level` | No args — canonical test level: `/Game/Maps/L_Grok` |
+| `load_level` | `level_path` e.g. `/Game/Maps/L_Grok` |
 | `find_actors` | Requires `name`, `tag`, `collision_channels` (use `""`, `""`, `[]` for all) |
 | `add_to_scene_from_asset` | `asset_path`, `name`, `xform` — works with Blueprints (e.g. `/Game/MCPTest/BP_GrokPhase7Test`) |
 | `remove_from_scene` | `actor.refPath` |
@@ -124,9 +125,23 @@ Write-only: `add_cube`, `add_sphere`, `add_cylinder`, `add_cone` — adds mesh c
 | `GetSkills` | `skillPaths` array |
 | `CreateSkill` / `UpdateSkill` | Write — needs user OK |
 
-## Curve table / Data asset / String table
+## Curve table (`editor_toolset.toolsets.curve_table.CurveTableTools`)
 
-Catalog only — `create` + row/entry tools; need assets under `/Game/MCPTest/`.
+| Tool | Notes |
+|------|-------|
+| `list_rows` | `curve_table.refPath` |
+| `add_key` / `get_keys` | `row_name` + `SimpleCurveKey` — then `save_assets` |
+
+## Material instance (`editor_toolset.toolsets.material_instance.MaterialInstanceTools`)
+
+| Tool | Notes |
+|------|-------|
+| `create` | `folder_path`, `asset_name`, `parent.refPath` — then **`save_assets`** |
+| `list_parameters` | On empty parent material → `[]` |
+
+## Data asset / String table
+
+Catalog — `DataAssetTools.create`; `StringTableTools` entry tools; assets under `/Game/MCPTest/`.
 
 ## Skeletal mesh (`editor_toolset.toolsets.skeletal_mesh.SkeletalMeshTools`)
 
