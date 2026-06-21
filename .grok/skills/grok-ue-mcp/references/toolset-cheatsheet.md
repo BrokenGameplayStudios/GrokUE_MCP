@@ -153,7 +153,7 @@ Write-only: `add_cube`, `add_sphere`, `add_cylinder`, `add_cone` — adds mesh c
 | Tool | Notes |
 |------|-------|
 | `create` | `folder_path`, `asset_name`, `asset_type.refPath` — then **`save_assets`** |
-| | `DataAsset` / `PrimaryDataAsset` are abstract bases — subclass in C++ or Blueprint first, then `create` that type; raw base → CB-visible but unsaved (`save_assets` → `false`); concrete plugin types (e.g. `InputAction`) save fine |
+| | Abstract bases (`DataAsset`, `PrimaryDataAsset`) → unsaved CB objects; **Blueprint workflow:** `BlueprintTools.create` parent `PrimaryDataAsset` → `add_variable` → `compile_blueprint` → `create` with `…BlueprintName_C` refPath; plugin types (e.g. `InputAction`) also work |
 
 ## Data table (`editor_toolset.toolsets.data_table.DataTableTools`)
 

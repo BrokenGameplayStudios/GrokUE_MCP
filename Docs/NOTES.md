@@ -301,7 +301,22 @@ Test actor: `PlayerStart` — refPath `/Temp/Untitled_1.Untitled_1:PersistentLev
 | AF5 | `get_rows` | **Pass** — default row values |
 | AF6 | `set_rows` | **Pass** — `mirroredName: GrokMirror`, `bEnabled: false` |
 
-**Test asset folder:** `/Game/MCPTest/` — `BP_GrokPhase7Test`, `M_GrokPhase7Test`, `M_GrokPhase7Test_Inst`, `M_GrokPhase7Test_MCP`, `LinearCurveTable_GrokPhase7Test`, `ST_GrokPhase7Test`, `DA_GrokPhase7Test_InputAction`, `DT_GrokPhase7Test`.
+### Batch AG — Blueprint Primary Data Asset (verified 2026-06-20)
+
+| # | Tool | Result |
+|---|------|--------|
+| AG1 | `BlueprintTools.create` parent `/Script/Engine.PrimaryDataAsset` | **Pass** — `BP_GrokPrimaryDataAsset` + `save_assets` |
+| AG2 | `add_variable` `GrokLabel` | **Pass** |
+| AG3 | `compile_blueprint` | **Pass** |
+| AG4 | `DataAssetTools.create` `asset_type: /Game/MCPTest/BP_GrokPrimaryDataAsset.BP_GrokPrimaryDataAsset_C` | **Pass** — `DA_GrokPrimaryDataAsset_Inst` + `save_assets` |
+| AG5 | `ObjectTools` `grokLabel` set/get | **Pass** — camelCase property name in JSON API |
+| AG6 | `search_subclasses` finds `BP_GrokPrimaryDataAsset_C` | **Pass** |
+
+**Workflow (correct Primary Data Asset path without C++):** Blueprint child of `PrimaryDataAsset` → add variables → compile → `DataAssetTools.create` with generated `_C` class → `ObjectTools` for defaults.
+
+**Test asset folder:** `/Game/MCPTest/` — `BP_GrokPhase7Test`, `M_GrokPhase7Test`, `M_GrokPhase7Test_Inst`, `M_GrokPhase7Test_MCP`, `LinearCurveTable_GrokPhase7Test`, `ST_GrokPhase7Test`, `DA_GrokPhase7Test_InputAction`, `DT_GrokPhase7Test`, `BP_GrokPrimaryDataAsset`, `DA_GrokPrimaryDataAsset_Inst`.
+
+**Next phase:** Integrated logic pipeline — see **`Docs/PHASE8_PLAN.md`**.
 
 ### Batch N — CaptureViewport (2026-06-20)
 
@@ -699,6 +714,8 @@ Use the template in [PLAN.md](PLAN.md) for additional failures.
 
 | Date | Change |
 |------|--------|
+| 2026-06-20 | Phase 7 Batch AG — Blueprint Primary Data Asset subclass + saveable instance |
+| 2026-06-20 | `Docs/PHASE8_PLAN.md` — integrated material/BP/DataTable pipeline (planned) |
 | 2026-06-20 | Phase 7 Batches AE/AF — DataAssetTools (InputAction), DataTableTools create + rows |
 | 2026-06-20 | Phase 7 Batch AD — StringTableTools create + entry probes; AB2 EditorStartupMap confirmed |
 | 2026-06-20 | Phase 7 AB/AC — `L_Grok` test level, EditorStartupMap, CurveTable/MaterialInstance probes |

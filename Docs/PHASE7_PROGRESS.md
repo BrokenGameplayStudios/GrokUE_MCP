@@ -2,8 +2,8 @@
 
 **Resume here.** Read this file only to know what to run next. Full results live in `Docs/NOTES.md` § Phase 7.
 
-**Last probe:** 2026-06-20 — `DataTableTools` create + row probes on `DT_GrokPhase7Test`  
-**Next probe:** Phase 7 wrap-up (mark complete)
+**Last probe:** 2026-06-20 — Batch AG Blueprint Primary Data Asset + instance save  
+**Next probe:** Phase 7 wrap-up; then **`Docs/PHASE8_PLAN.md`** (integrated logic pipeline)
 
 ## GrokProjectTools — no editor UI
 
@@ -247,9 +247,25 @@ Source: `Plugins/GrokUEMCPTools/Content/Python/grok_ue_mcp/toolsets/project_tool
 
 **Test asset:** `/Game/MCPTest/DT_GrokPhase7Test`
 
+### Batch AG — Blueprint Primary Data Asset (verified 2026-06-20)
+
+| ID | Tool | Result |
+|----|------|--------|
+| AG1 | `BlueprintTools.create` parent `PrimaryDataAsset` → `BP_GrokPrimaryDataAsset` | Pass — + `save_assets` |
+| AG2 | `add_variable` `GrokLabel` (string) | Pass |
+| AG3 | `compile_blueprint` | Pass |
+| AG4 | `DataAssetTools.create` `asset_type: …BP_GrokPrimaryDataAsset_C` → `DA_GrokPrimaryDataAsset_Inst` | Pass — + `save_assets` (fixes AE abstract-base hitch) |
+| AG5 | `ObjectTools.set_properties` / `get_properties` `grokLabel` | Pass — round-trip |
+| AG6 | `search_subclasses` `PrimaryDataAsset` filter `GrokPrimary` | Pass — finds `BP_GrokPrimaryDataAsset_C` |
+
+**Workflow:** Blueprint subclass → compile → `create` instance with `…_C` generated class refPath.
+
+**Test assets:** `/Game/MCPTest/BP_GrokPrimaryDataAsset`, `/Game/MCPTest/DA_GrokPrimaryDataAsset_Inst`
+
 ## Queue — run in order (one MCP call at a time)
 
 1. Phase 7 wrap-up — mark complete in `NOTES.md` phase table + handoff
+2. Phase 8 — see **`Docs/PHASE8_PLAN.md`** (material + MI + BP mesh + DataTable ForEach Print)
 
 ## Skipped for now
 
