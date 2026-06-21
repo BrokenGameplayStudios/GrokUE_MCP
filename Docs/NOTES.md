@@ -180,12 +180,15 @@ Test actor: `PlayerStart` — refPath `/Temp/Untitled_1.Untitled_1:PersistentLev
 
 | # | Tool | Arguments | Result |
 |---|------|-----------|--------|
-| V1 | `create` | `folder_path: /Game/Developers/`, `asset_name: BP_GrokPhase7Test`, `asset_type: /Script/Engine.Actor` | **Pass** — `/Game/Developers/BP_GrokPhase7Test.BP_GrokPhase7Test` |
+| V1 | `create` | `folder_path: /Game/Developers/`, `asset_name: BP_GrokPhase7Test`, `asset_type: /Script/Engine.Actor` | **Pass (in-memory)** — refPath returned; **no `.uasset` on disk yet** |
 | V2 | `get_parent` | new Blueprint ref | **Pass** — parent `/Script/Engine.Actor` |
 | V3 | `list_graphs` | new Blueprint ref | **Pass** — `EventGraph`, `UserConstructionScript` |
-| V4 | `find_assets` | `folder_path: /Game/Developers/`, `name: BP_GrokPhase7Test` | **Pass** — `/Game/Developers/BP_GrokPhase7Test` |
+| V4 | `save_assets` | `asset_paths: ["/Game/Developers/BP_GrokPhase7Test"]` | **Pass** — writes `Content/Developers/BP_GrokPhase7Test.uasset` |
+| V5 | `move` | → `/Game/Developers/Brian/BP_GrokPhase7Test` | **Pass** — final path under per-user Developers folder |
 
-**Test asset created:** `BP_GrokPhase7Test` under `/Game/Developers/` — confirm in Content Browser. Graph-level probes (`read_graph_dsl`, `write_graph_dsl`) now unblocked.
+**Hitch:** `BlueprintTools.create` does not persist to disk. MCP `exists` / `find_assets` can report the asset while Content Browser stays empty until `AssetTools.save_assets`. Always save after create; prefer `/Game/Developers/<YourName>/` over bare `/Game/Developers/`.
+
+**Test asset:** `/Game/Developers/Brian/BP_GrokPhase7Test` — refresh Content Browser. Graph-level probes now unblocked.
 
 ### Batch N — CaptureViewport (2026-06-20)
 
@@ -569,6 +572,7 @@ Editor restarts invalidate MCP session IDs. If Grok reports `Unknown session id`
 
 | Date | Issue | Resolution |
 |------|-------|------------|
+| 2026-06-20 | `BlueprintTools.create` — returns refPath but no `.uasset` until `save_assets` | Call `AssetTools.save_assets` immediately after create; see Batch V |
 | 2026-06-20 | `CaptureViewport` — `{}` rejected; optional `captureTransform` and `annotations` lack binding defaults | Pass both explicitly from `GetCameraTransform` + minimal annotations; see Batch N |
 | 2026-06-20 | `GrokProjectTools` — dataclass return type broke `@unreal.uclass()` generation | Use `@unreal.ustruct()`; restart editor after fix |
 

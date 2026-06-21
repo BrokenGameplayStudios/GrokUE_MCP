@@ -53,6 +53,7 @@
 | `list_folders` | `root_path`, `recursive` |
 | `get_asset_class` | `asset_path` — e.g. `/Engine/BasicShapes/Cube` → StaticMesh |
 | `find_assets` | `folder_path`, `name` required (`""` = all); empty folder = engine+plugin-wide; use `/Game` to scope |
+| `save_assets` | `asset_paths` array — **required after Blueprint `create`** |
 
 ## Object (`editor_toolset.toolsets.object.ObjectTools`)
 
@@ -79,7 +80,7 @@ Write-only: `add_cube`, `add_sphere`, `add_cylinder`, `add_cone` — adds mesh c
 | Tool | Notes |
 |------|-------|
 | `get_graph_dsl_docs` | No blueprint needed — DSL grammar |
-| `create` | `folder_path`, `asset_name`, `asset_type.refPath` — e.g. Actor → `/Game/Developers/BP_GrokPhase7Test` |
+| `create` | `folder_path`, `asset_name`, `asset_type.refPath` — then **`save_assets`** (create alone is in-memory only) |
 | `get_parent` / `list_graphs` | `blueprint.refPath` |
 | `read_graph_dsl` / `write_graph_dsl` | Needs graph ref from `list_graphs` |
 

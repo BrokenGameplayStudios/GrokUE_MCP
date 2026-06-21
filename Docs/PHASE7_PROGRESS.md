@@ -128,12 +128,14 @@ Source: `Plugins/GrokUEMCPTools/Content/Python/grok_ue_mcp/toolsets/project_tool
 
 | ID | Tool | Result |
 |----|------|--------|
-| V1 | `create` `/Game/Developers/BP_GrokPhase7Test` parent `Actor` | Pass — refPath returned |
+| V1 | `create` `/Game/Developers/BP_GrokPhase7Test` parent `Actor` | Pass in-memory — **not on disk until `save_assets`** |
 | V2 | `get_parent` | Pass — `/Script/Engine.Actor` |
 | V3 | `list_graphs` | Pass — `EventGraph`, `UserConstructionScript` |
-| V4 | `find_assets` `/Game/Developers/` | Pass — asset discoverable |
+| V4 | `save_assets` then `move` → `/Game/Developers/Brian/` | Pass — `.uasset` on disk |
 
-**Test asset:** `/Game/Developers/BP_GrokPhase7Test` — user can verify in Content Browser.
+**Hitch:** `create` returns refPath + `exists: true` but Content Browser shows nothing until `AssetTools.save_assets`. Use `/Game/Developers/Brian/` (per-user folder), not bare `/Game/Developers/`.
+
+**Test asset:** `/Game/Developers/Brian/BP_GrokPhase7Test` — refresh Content Browser under your Developers folder.
 
 ## Queue — run in order (one MCP call at a time)
 
