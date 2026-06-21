@@ -6,7 +6,7 @@ Instructions for AI agents (Grok, etc.) working in this Unreal Engine 5.8 projec
 **MCP endpoint:** `http://127.0.0.1:8000/mcp` (project-scoped in `.grok/config.toml`)  
 **Test level:** `/Game/Maps/L_Grok` — `EditorStartupMap` in `Config/DefaultEngine.ini` (restart UE after change)
 
-> **New session?** Phases 0–6 **complete**; Phase 7 nearly done. Read `Docs/NOTES.md` → **Handoff**, then **`Docs/PHASE7_PROGRESS.md`** for the next probe; **`Docs/PHASE8_PLAN.md`** for the integrated logic pipeline. Load `/grok-ue-mcp`, run `GrokProjectTools.health_check`.
+> **New session?** Phases 0–7 **complete**. Read `Docs/NOTES.md` → **Handoff**, then **`Docs/PHASE8_PLAN.md`** for the next work. Phase 7 archive: `Docs/PHASE7_PROGRESS.md`. Load `/grok-ue-mcp`, run `GrokProjectTools.health_check`.
 
 ---
 

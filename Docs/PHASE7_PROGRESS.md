@@ -1,9 +1,10 @@
-# Phase 7 — progress checkpoint
+# Phase 7 — progress checkpoint (COMPLETE)
 
-**Resume here.** Read this file only to know what to run next. Full results live in `Docs/NOTES.md` § Phase 7.
+**Phase 7 finished 2026-06-20.** Do not re-run batches below unless regressing. Full results: `Docs/NOTES.md` § Phase 7.
 
-**Last probe:** 2026-06-20 — Batch AG Blueprint Primary Data Asset + instance save  
-**Next probe:** Phase 7 wrap-up; then **`Docs/PHASE8_PLAN.md`** (integrated logic pipeline)
+**Next phase:** **`Docs/PHASE8_PLAN.md`** — integrated material + Blueprint + DataTable logic pipeline.
+
+**Last probe:** Batch AG — Blueprint Primary Data Asset + saveable instance.
 
 ## GrokProjectTools — no editor UI
 
@@ -262,10 +263,9 @@ Source: `Plugins/GrokUEMCPTools/Content/Python/grok_ue_mcp/toolsets/project_tool
 
 **Test assets:** `/Game/MCPTest/BP_GrokPrimaryDataAsset`, `/Game/MCPTest/DA_GrokPrimaryDataAsset_Inst`
 
-## Queue — run in order (one MCP call at a time)
+## Queue
 
-1. Phase 7 wrap-up — mark complete in `NOTES.md` phase table + handoff
-2. Phase 8 — see **`Docs/PHASE8_PLAN.md`** (material + MI + BP mesh + DataTable ForEach Print)
+**Empty** — Phase 7 complete. Start Phase 8 at **`Docs/PHASE8_PLAN.md`**.
 
 ## Skipped for now
 

@@ -10,7 +10,7 @@ description: >
 
 # GrokUE MCP Integration
 
-**Handoff:** Phases 0–5 are complete. Read `Docs/NOTES.md` → **Handoff** before re-running setup tests. Run `GrokProjectTools.health_check` first.
+**Handoff:** Phases 0–7 are complete. Read `Docs/NOTES.md` → **Handoff**; next work: `Docs/PHASE8_PLAN.md`. Run `GrokProjectTools.health_check` first.
 
 You are working in **GrokUE_MCP** — a blank UE 5.8 project wired to Grok via Epic's built-in Unreal MCP plugin.
 

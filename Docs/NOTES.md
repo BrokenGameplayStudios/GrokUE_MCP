@@ -1,7 +1,7 @@
 # GrokUE_MCP — Integration Notes
 
 **Last updated:** 2026-06-20  
-**Current phase:** Phase 7 in progress — expanding toolset coverage. Phases 0–6 pass. **Resume:** `Docs/PHASE7_PROGRESS.md`
+**Current phase:** Phase 7 **complete**. Phases 0–7 pass. **Resume:** `Docs/PHASE8_PLAN.md`
 
 This file records what we verified, what failed, and answers to open questions from [PLAN.md](PLAN.md). Update it as each phase completes.
 
@@ -34,7 +34,7 @@ This file records what we verified, what failed, and answers to open questions f
 | 4 | Daily startup/shutdown workflow adopted |
 | 5 | `AGENTS.md`, `/grok-ue-mcp` skill, custom `GrokUEMCPTools` plugin (**20 toolsets**) |
 | 6 | Cursor IDE re-confirmed Phase 3 results (no new capability; see Phase 6) |
-| 7 | **In progress** — toolset coverage + test level `L_Grok` (see Phase 7) |
+| 7 | **Pass** — all 19 Epic toolsets cataloged/probed; test level `L_Grok`; `/Game/MCPTest/` assets (see Phase 7) |
 
 ### GrokProjectTools — what it is (no editor window)
 
@@ -64,7 +64,8 @@ To add more project tools, edit `project_tools.py`, restart the editor, then `Mo
 | Custom tool authoring rules | `@unreal.ustruct()` for struct returns — **not** `@dataclass` (see Phase 5 hitch below) |
 | Gameplay / content | `Content/` (blank today) |
 | CI / headless MCP | `Docs/PLAN.md` Phase 5 — `-ModelContextProtocolStartServer` (not started) |
-| **Phase 7 — expand coverage** | **`Docs/PHASE7_PROGRESS.md`** — checkpoint after each probe; do not re-run completed batches |
+| **Phase 8 — integrated logic** | **`Docs/PHASE8_PLAN.md`** — material + MI + BP + DataTable pipeline |
+| Phase 7 results (archive) | **`Docs/PHASE7_PROGRESS.md`** — do not re-run completed batches |
 
 ### 4. Key repo paths
 
@@ -97,15 +98,17 @@ F:\git\GrokUE_MCP\
 | 4 — Repeatable workflow | **Pass** | 2026-06-20 | Daily startup/shutdown checklist adopted |
 | 5 — Grow capabilities | **Pass** | 2026-06-20 | 20 toolsets; `health_check` live-verified from fresh Grok session |
 | 6 — Multi-client regression | **Pass** | 2026-06-20 | Cursor IDE agent: read + write tests; `grok mcp doctor` healthy |
-| 7 — Expand toolset coverage | **In progress** | 2026-06-20 | All 19 Epic toolsets cataloged; Batches F–AA; resume `PHASE7_PROGRESS.md` |
+| 7 — Expand toolset coverage | **Pass** | 2026-06-20 | All 19 Epic toolsets cataloged/probed (Batches F–AG); `L_Grok` + `/Game/MCPTest/`; see Phase 7 summary |
 
 ---
 
-## Phase 7 — Expand Toolset Coverage (In Progress)
+## Phase 7 — Expand Toolset Coverage (Complete)
 
 **Goal:** Document what Epic's 19 shipped toolsets can do in this blank project, so repo readers (Grok, Cursor, humans) know what is possible without re-probing.
 
-**Workflow:** One MCP call at a time → record result in this section → update `Docs/PHASE7_PROGRESS.md` queue → commit incrementally.
+**Result:** **Pass** — 2026-06-20. All 19 Epic toolsets cataloged; read and write probes through Batch AG. Canonical test level `/Game/Maps/L_Grok`; test assets in `/Game/MCPTest/`. Checkpoint archive: `Docs/PHASE7_PROGRESS.md`. Tool quick-ref: `.grok/skills/grok-ue-mcp/references/toolset-cheatsheet.md`.
+
+**Deferred to Phase 8+:** `StartPIE`/`StopPIE`, `SkeletalMeshTools` (no SK asset), `PrimitiveTools` write, material expression graph / `write_graph_dsl` logic chains — see `Docs/PHASE8_PLAN.md`.
 
 ### Batch F — EditorApp read-only (verified 2026-06-20)
 
@@ -714,6 +717,7 @@ Use the template in [PLAN.md](PLAN.md) for additional failures.
 
 | Date | Change |
 |------|--------|
+| 2026-06-20 | **Phase 7 complete** — all 19 Epic toolsets cataloged/probed; resume `PHASE8_PLAN.md` |
 | 2026-06-20 | Phase 7 Batch AG — Blueprint Primary Data Asset subclass + saveable instance |
 | 2026-06-20 | `Docs/PHASE8_PLAN.md` — integrated material/BP/DataTable pipeline (planned) |
 | 2026-06-20 | Phase 7 Batches AE/AF — DataAssetTools (InputAction), DataTableTools create + rows |
