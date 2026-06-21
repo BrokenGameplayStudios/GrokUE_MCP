@@ -96,7 +96,7 @@ F:\git\GrokUE_MCP\
 | 4 — Repeatable workflow | **Pass** | 2026-06-20 | Daily startup/shutdown checklist adopted |
 | 5 — Grow capabilities | **Pass** | 2026-06-20 | 20 toolsets; `health_check` live-verified from fresh Grok session |
 | 6 — Multi-client regression | **Pass** | 2026-06-20 | Cursor IDE agent: read + write tests; `grok mcp doctor` healthy |
-| 7 — Expand toolset coverage | **In progress** | 2026-06-20 | Batches F/G/H pass; resume at `PHASE7_PROGRESS.md` queue |
+| 7 — Expand toolset coverage | **In progress** | 2026-06-20 | Batches F–O; `CaptureViewport` hitch; resume `PHASE7_PROGRESS.md` |
 
 ---
 
@@ -141,6 +141,67 @@ Test actor: `PlayerStart` — refPath `/Temp/Untitled_1.Untitled_1:PersistentLev
 | # | Tool | Result |
 |---|------|--------|
 | I1 | `CaptureAssetImage` `/Engine/BasicShapes/Cube` | **Pass** — returns `image/png` base64 thumbnail (omit payload from docs) |
+
+### Batch J — Editor utilities (verified 2026-06-20)
+
+| # | Tool | Result |
+|---|------|--------|
+| J1 | `SearchCVars` `name: r.Shadow` | **Pass** — JSON string of matching cvars (`help` + `value`) |
+
+### Batch K — AssetTools read-only (verified 2026-06-20)
+
+**Tool catalog (21 tools):** `find_assets`, `list_folders`, `get_asset_class`, `get_plugin_content_paths`, `load_asset`, `exists`, `read_file`/`write_file`, `create_folder`, `move`, `duplicate`, `delete`, `save_assets`, metadata/registry helpers, dependency queries.
+
+| # | Tool | Result |
+|---|------|--------|
+| K1 | `get_plugin_content_paths` | **Pass** — `["/GrokUEMCPTools/"]` |
+| K2 | `list_folders` `/Game` | **Pass** — `/Game/Collections/`, `/Game/Developers/` (blank project) |
+| K3 | `get_asset_class` `/Engine/BasicShapes/Cube` | **Pass** — `StaticMesh` |
+| K4 | `find_assets` `folder_path: ""`, `name: ""` | **Pass** — 2000+ asset paths (engine/plugin content: Niagara, Water, PCG, etc.); not limited to `/Game`. Use `folder_path: "/Game"` to scope. |
+
+### Batch L — ObjectTools read-only (verified 2026-06-20)
+
+**Tool catalog (6 tools):** `search_subclasses`, `get_class`, `list_properties`, `get_properties`, `set_properties`, `reset_properties`.
+
+| # | Tool | Result |
+|---|------|--------|
+| L1 | `search_subclasses` base `Actor`, filter `PlayerStart` | **Pass** — `PlayerStart`, `PlayerStartPIE` |
+| L2 | `get_properties` PlayerStart, `properties: ["bHidden"]` | **Pass** — `{"bHidden": false}` (JSON string) |
+
+### Batch M — BlueprintTools (verified 2026-06-20)
+
+**Tool catalog (40+ tools):** graph DSL (`read_graph_dsl`/`write_graph_dsl`), node graph editing, variables, functions/events, `create`, `compile_blueprint`, etc. **No `/Game` Blueprint assets yet** — graph-level probes deferred.
+
+| # | Tool | Result |
+|---|------|--------|
+| M1 | `get_graph_dsl_docs` | **Pass** — returns S-expression DSL grammar for `write_graph_dsl` |
+
+### Batch N — CaptureViewport hitch (2026-06-20)
+
+| # | Tool | Result |
+|---|------|--------|
+| N1 | `CaptureViewport` `{}` or `{"bShowUI": false}` | **Fail** — `captureTransform` needs a default value (optional in schema; binding rejects empty args) |
+
+### Batch O — ProgrammaticToolset (verified 2026-06-20)
+
+| # | Tool | Result |
+|---|------|--------|
+| O1 | `get_execution_environment` | **Pass** — Python sandbox; `execute_tool()`; modules: json, math, re, time, datetime, copy |
+| O2 | `execute_tool_script` batch `health_check` + `get_current_level` | **Pass** — single round-trip returns both values |
+
+### Batch P — PrimitiveTools (catalog 2026-06-20)
+
+**Tool catalog (4 tools, all write):** `add_cube`, `add_sphere`, `add_cylinder`, `add_cone` — attach engine basic-shape StaticMeshComponents to an actor. No read-only probes; write tests deferred.
+
+### Batch Q — StaticMeshTools (verified 2026-06-20)
+
+**Tool catalog (16 tools):** LOD queries/edits, Nanite toggle, collision gen/remove, material slots, bounds, `import_file`.
+
+| # | Tool | Result |
+|---|------|--------|
+| Q1 | `get_lod_count` mesh `/Engine/BasicShapes/Cube.Cube` | **Pass** — `1` LOD |
+
+**Note:** Static mesh `mesh.refPath` must include asset name (e.g. `.Cube`), not folder path alone.
 
 **Next in queue:** see `Docs/PHASE7_PROGRESS.md`.
 
@@ -470,6 +531,7 @@ Editor restarts invalidate MCP session IDs. If Grok reports `Unknown session id`
 
 | Date | Issue | Resolution |
 |------|-------|------------|
+| 2026-06-20 | `CaptureViewport` — `{}` rejected; optional `captureTransform` lacks binding default | Pass explicit transform or wait for Epic fix; see Batch N |
 | 2026-06-20 | `GrokProjectTools` — dataclass return type broke `@unreal.uclass()` generation | Use `@unreal.ustruct()`; restart editor after fix |
 
 Use the template in [PLAN.md](PLAN.md) for additional failures.
@@ -480,7 +542,8 @@ Use the template in [PLAN.md](PLAN.md) for additional failures.
 
 | Date | Change |
 |------|--------|
-| 2026-06-20 | **Phase 7 started** — `PHASE7_PROGRESS.md` checkpoint; Batches F/G/H/I; GrokProjectTools FAQ in handoff |
+| 2026-06-20 | Phase 7 — Batches J–O (Asset/Object/Blueprint/Programmatic); `CaptureViewport` hitch |
+| 2026-06-20 | **Phase 7 started** — `PHASE7_PROGRESS.md` checkpoint; Batches F–I; GrokProjectTools FAQ in handoff |
 | 2026-06-20 | **Phase 6 pass** — Cursor IDE regression (Batches D/E); `get_session_info` verified; multi-client table |
 | 2026-06-20 | Handoff section + `health_check` Grok session screenshot; integration marked complete |
 | 2026-06-20 | Phase 5 custom toolset **pass** — screenshot + log confirm 20 toolsets after ustruct fix |

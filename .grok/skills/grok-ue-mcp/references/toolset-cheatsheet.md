@@ -45,6 +45,51 @@
 | `get_components` | `actor.refPath` |
 | `get_tags` | `actor.refPath` |
 
+## Asset (`editor_toolset.toolsets.asset.AssetTools`)
+
+| Tool | Notes |
+|------|-------|
+| `get_plugin_content_paths` | `include_engine` optional |
+| `list_folders` | `root_path`, `recursive` |
+| `get_asset_class` | `asset_path` — e.g. `/Engine/BasicShapes/Cube` → StaticMesh |
+| `find_assets` | `folder_path`, `name` required (`""` = all); empty folder = engine+plugin-wide; use `/Game` to scope |
+
+## Object (`editor_toolset.toolsets.object.ObjectTools`)
+
+| Tool | Notes |
+|------|-------|
+| `search_subclasses` | `base_class.refPath`, `class_name` filter |
+| `get_properties` / `list_properties` | `instance.refPath`; returns JSON string |
+
+## Primitive (`editor_toolset.toolsets.primitive.PrimitiveTools`)
+
+Write-only: `add_cube`, `add_sphere`, `add_cylinder`, `add_cone` — adds mesh component to actor.
+
+## Static mesh (`editor_toolset.toolsets.static_mesh.StaticMeshTools`)
+
+| Tool | Notes |
+|------|-------|
+| `get_lod_count` | `mesh.refPath` e.g. `/Engine/BasicShapes/Cube.Cube` |
+| `is_nanite_enabled` | Read |
+| `get_bounds` / `get_material_slots` | Read |
+
+## Blueprint (`editor_toolset.toolsets.blueprint.BlueprintTools`)
+
+| Tool | Notes |
+|------|-------|
+| `get_graph_dsl_docs` | No blueprint needed — DSL grammar |
+| `create` | Needs `/Game` folder + parent class — write test |
+| `read_graph_dsl` / `write_graph_dsl` | Needs existing Blueprint asset |
+
+## Programmatic (`editor_toolset.toolsets.programmatic.ProgrammaticToolset`)
+
+| Tool | Notes |
+|------|-------|
+| `get_execution_environment` | Call once before scripting |
+| `execute_tool_script` | Python `run()` → dict; batch MCP calls |
+
+**Quirk:** `CaptureViewport` fails with `{}` — optional `captureTransform` binding issue (Batch N).
+
 ## Custom (`grok_ue_mcp.toolsets.project_tools.GrokProjectTools`)
 
 | Tool | Notes |
