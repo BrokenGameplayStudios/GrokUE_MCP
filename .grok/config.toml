@@ -1,0 +1,9 @@
+# Project-scoped Grok MCP configuration for GrokUE_MCP.
+# Loaded automatically when running `grok` from anywhere inside this repo.
+# See Docs/PLAN.md for setup instructions.
+
+[mcp_servers.unreal-mcp]
+url = "http://127.0.0.1:8000/mcp"
+enabled = true
+startup_timeout_sec = 30
+tool_timeout_sec = 120
