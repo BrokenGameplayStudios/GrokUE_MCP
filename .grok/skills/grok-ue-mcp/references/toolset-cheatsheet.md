@@ -12,7 +12,7 @@
 |------|-------|
 | `get_current_level` | No args |
 | `find_actors` | Requires `name`, `tag`, `collision_channels` (use `""`, `""`, `[]` for all) |
-| `add_to_scene_from_asset` | `asset_path`, `name`, `xform` |
+| `add_to_scene_from_asset` | `asset_path`, `name`, `xform` — works with Blueprints (e.g. `/Game/MCPTest/BP_GrokPhase7Test`) |
 | `remove_from_scene` | `actor.refPath` |
 
 ## Editor app (`EditorToolset.EditorAppToolset`)
@@ -71,6 +71,7 @@ Write-only: `add_cube`, `add_sphere`, `add_cylinder`, `add_cone` — adds mesh c
 | Tool | Notes |
 |------|-------|
 | `get_lod_count` | `mesh.refPath` e.g. `/Engine/BasicShapes/Cube.Cube` → `1` |
+| `get_triangle_count` | Engine Cube → `48` |
 | `is_nanite_enabled` | Engine Cube → `false` |
 | `get_bounds` | Engine Cube → ±50 cm AABB |
 | `get_material_slots` | Engine Cube → `["WorldGridMaterial"]` |
@@ -81,7 +82,7 @@ Write-only: `add_cube`, `add_sphere`, `add_cylinder`, `add_cone` — adds mesh c
 |------|-------|
 | `get_graph_dsl_docs` | No blueprint needed — DSL grammar |
 | `create` | `folder_path`, `asset_name`, `asset_type.refPath` — then **`save_assets`**; use `/Game/MCPTest/` not `/Game/Developers/` (CB hides Developers) |
-| `get_parent` / `list_graphs` / `list_functions` | `blueprint.refPath` |
+| `get_parent` / `list_graphs` / `list_functions` / `list_events` | `blueprint.refPath` |
 | `get_graph` | `blueprint.refPath`, `graph_name` (e.g. `EventGraph`) |
 | `read_graph_dsl` / `write_graph_dsl` | `graph.refPath` from `get_graph` |
 
@@ -94,7 +95,12 @@ Write-only: `add_cube`, `add_sphere`, `add_cylinder`, `add_cone` — adds mesh c
 
 ## Material (`editor_toolset.toolsets.material.MaterialTools`)
 
-Graph editing for Materials/MaterialFunctions (22 tools). Needs `/Game` Material asset — catalog only so far.
+| Tool | Notes |
+|------|-------|
+| `create_material` | `folder_path`, `asset_name` — then **`save_assets`** |
+| `get_expressions` | `material_or_function.refPath` — empty on new material |
+
+22 graph-editing tools total; graph write probes deferred.
 
 ## Texture (`editor_toolset.toolsets.texture.TextureTools`)
 
@@ -117,6 +123,14 @@ Graph editing for Materials/MaterialFunctions (22 tools). Needs `/Game` Material
 | `ListSkills` | No args — returns built-in EditorToolset Python skills |
 | `GetSkills` | `skillPaths` array |
 | `CreateSkill` / `UpdateSkill` | Write — needs user OK |
+
+## Curve table / Data asset / String table
+
+Catalog only — `create` + row/entry tools; need assets under `/Game/MCPTest/`.
+
+## Skeletal mesh (`editor_toolset.toolsets.skeletal_mesh.SkeletalMeshTools`)
+
+20 tools (bones, sockets, LOD, materials, `import_file`) — no engine skeletal mesh probed in blank project.
 
 **Quirk:** `CaptureViewport` fails with `{}` — pass explicit `captureTransform` + `annotations` (Batch N).
 

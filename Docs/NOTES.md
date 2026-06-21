@@ -96,7 +96,7 @@ F:\git\GrokUE_MCP\
 | 4 — Repeatable workflow | **Pass** | 2026-06-20 | Daily startup/shutdown checklist adopted |
 | 5 — Grow capabilities | **Pass** | 2026-06-20 | 20 toolsets; `health_check` live-verified from fresh Grok session |
 | 6 — Multi-client regression | **Pass** | 2026-06-20 | Cursor IDE agent: read + write tests; `grok mcp doctor` healthy |
-| 7 — Expand toolset coverage | **In progress** | 2026-06-20 | Batches F–Y; queue empty; resume `PHASE7_PROGRESS.md` for optional follow-ups |
+| 7 — Expand toolset coverage | **In progress** | 2026-06-20 | All 19 Epic toolsets cataloged; Batches F–AA; resume `PHASE7_PROGRESS.md` |
 
 ---
 
@@ -216,6 +216,37 @@ Test actor: `PlayerStart` — refPath `/Temp/Untitled_1.Untitled_1:PersistentLev
 | Y1 | `list_functions` | **Pass** — `UserConstructionScript` implemented |
 | Y2 | `get_graph` `EventGraph` | **Pass** |
 | Y3 | `read_graph_dsl` EventGraph | **Pass** — default BeginPlay / BeginOverlap / Tick events (empty bodies) |
+| Y4 | `list_events` | **Pass** — BeginPlay, BeginOverlap, Tick implemented; 20+ inheritable Actor events |
+
+### Batch R — MaterialTools write (verified 2026-06-20)
+
+| # | Tool | Result |
+|---|------|--------|
+| R1 | `create_material` `/Game/MCPTest/M_GrokPhase7Test` | **Pass** — + `save_assets` (same hitch as Blueprint create) |
+| R2 | `get_expressions` | **Pass** — `[]` on empty material |
+
+### Batch Z — Spawn Blueprint actor (verified 2026-06-20)
+
+| # | Tool | Result |
+|---|------|--------|
+| Z1 | `add_to_scene_from_asset` `/Game/MCPTest/BP_GrokPhase7Test` → `GrokPhase7TestActor` at (200,0,100) | **Pass** — MCP refPath returned; **user viewport confirm pending** |
+| Z2 | `find_actors` `name: GrokPhase7TestActor` | **Pass** |
+
+### Batch AA — Remaining toolsets (catalog 2026-06-20)
+
+| Toolset | Tool names |
+|---------|------------|
+| `CurveTableTools` | `create`, `import_file`, `list_rows`, `add_row`, `remove_row`, `rename_row`, `add_key`, `set_keys`, `get_keys` |
+| `DataAssetTools` | `create` |
+| `MaterialInstanceTools` | `create`, `list_parameters`, parameter get/set, `set_parent`, `clear_parameters` |
+| `SkeletalMeshTools` | `import_file`, LOD/bone/socket/material probes (20 tools) — deferred (no engine SK in blank project) |
+| `StringTableTools` | `create`, `import_file`, `list_keys`, `get_entry`, `set_entry`, `remove_entry`, `get_namespace`, `get_table_id` |
+
+| # | Tool | Result |
+|---|------|--------|
+| AA1 | `MaterialInstanceTools.list_parameters` on `M_GrokPhase7Test` | **Pass** — `[]` |
+
+**StaticMeshTools (additional):** `get_triangle_count` Engine Cube → **48** triangles.
 
 ### Batch N — CaptureViewport (2026-06-20)
 
@@ -612,6 +643,7 @@ Use the template in [PLAN.md](PLAN.md) for additional failures.
 
 | Date | Change |
 |------|--------|
+| 2026-06-20 | Phase 7 Batches R/Z/AA — Material create, Blueprint spawn, remaining toolset catalogs |
 | 2026-06-20 | Phase 7 Batches W–Y — TextureTools, DataTableTools, Blueprint graph read probes |
 | 2026-06-20 | Phase 7 Batch V screenshot — `BP_GrokPhase7Test` user-confirmed in `/Game/MCPTest/` |
 | 2026-06-20 | Phase 7 — Blueprint write test (`BP_GrokPhase7Test` in `/Game/Developers/`) |

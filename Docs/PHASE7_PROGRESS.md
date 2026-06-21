@@ -2,8 +2,8 @@
 
 **Resume here.** Read this file only to know what to run next. Full results live in `Docs/NOTES.md` § Phase 7.
 
-**Last probe:** 2026-06-20 — `BlueprintTools.read_graph_dsl` on `BP_GrokPhase7Test` EventGraph  
-**Next probe:** Phase 7 queue empty — optional deeper probes (Material graph, PIE, spawn from new BP)
+**Last probe:** 2026-06-20 — catalog CurveTable/DataAsset/SkeletalMesh/StringTable toolsets  
+**Next probe:** optional — MaterialInstance create, CurveTable create, remove `GrokPhase7TestActor` from level
 
 ## GrokProjectTools — no editor UI
 
@@ -103,10 +103,16 @@ Source: `Plugins/GrokUEMCPTools/Content/Python/grok_ue_mcp/toolsets/project_tool
 | Q2 | `is_nanite_enabled` Engine Cube | Pass — `false` |
 | Q3 | `get_bounds` Engine Cube | Pass — ±50 cm AABB |
 | Q4 | `get_material_slots` Engine Cube | Pass — `["WorldGridMaterial"]` |
+| Q5 | `get_triangle_count` Engine Cube | Pass — `48` |
 
-### Batch R — MaterialTools (catalog only)
+### Batch R — MaterialTools (verified 2026-06-20)
 
-**Tool catalog (22 tools):** `create_material`, `create_function`, `create_parameter_collection`, `add_expression`, `delete_expression`, `get_expressions`, `layout_expressions`, `list_expression_classes`, `list_parameter_groups`, `rename_parameter_group`, `delete_parameter_group`, `get_expression_input_names`, `get_expression_output_names`, `connect_expressions`, `disconnect_expressions`, `get_expression_inputs`, `get_property_input`, `connect_to_output`, `disconnect_from_output`, `delete_unused_expressions`, `recompile`, `get_referencing_materials`. Needs `/Game` Material asset for probes — deferred.
+**Tool catalog (22 tools):** expression graph editing, parameter groups, `recompile`, etc.
+
+| ID | Tool | Result |
+|----|------|--------|
+| R1 | `create_material` `/Game/MCPTest/M_GrokPhase7Test` | Pass — + `save_assets` |
+| R2 | `get_expressions` empty material | Pass — `[]` |
 
 ### Batch S — TextureTools (catalog only)
 
@@ -158,10 +164,34 @@ Source: `Plugins/GrokUEMCPTools/Content/Python/grok_ue_mcp/toolsets/project_tool
 | Y1 | `list_functions` | Pass — `UserConstructionScript` implemented |
 | Y2 | `get_graph` `EventGraph` | Pass — graph ref returned |
 | Y3 | `read_graph_dsl` EventGraph | Pass — default events (BeginPlay, BeginOverlap, Tick); omit full DSL in docs |
+| Y4 | `list_events` | Pass — BeginPlay/BeginOverlap/Tick implemented; 20+ inheritable events listed |
+
+### Batch Z — Spawn Blueprint actor (verified 2026-06-20)
+
+| ID | Tool | Result |
+|----|------|--------|
+| Z1 | `add_to_scene_from_asset` `BP_GrokPhase7Test` → `GrokPhase7TestActor` | Pass — at (200,0,100); confirm in Outliner/viewport |
+| Z2 | `find_actors` filter `GrokPhase7TestActor` | Pass — refPath returned |
+
+### Batch AA — Remaining toolsets (catalog 2026-06-20)
+
+| Toolset | Tools (names only) |
+|---------|-------------------|
+| `CurveTableTools` | `create`, `import_file`, `list_rows`, `add_row`, `remove_row`, `rename_row`, `add_key`, `set_keys`, `get_keys` |
+| `DataAssetTools` | `create` |
+| `MaterialInstanceTools` | `create`, `list_parameters`, scalar/vector/texture/static-switch get/set, `set_parent`, `clear_parameters` |
+| `SkeletalMeshTools` | `import_file`, LOD/vertex/section counts, bones/sockets/morphs/materials/physics (20 tools) — no engine SK path probed |
+| `StringTableTools` | `create`, `import_file`, `list_keys`, `get_entry`, `set_entry`, `remove_entry`, `get_namespace`, `get_table_id` |
+
+| ID | Tool | Result |
+|----|------|--------|
+| AA1 | `MaterialInstanceTools.list_parameters` on `M_GrokPhase7Test` | Pass — `[]` (no parameters on empty material) |
 
 ## Queue — run in order (one MCP call at a time)
 
-_Empty — optional follow-ups: Material graph probes, `StartPIE`, spawn `BP_GrokPhase7Test` in level._
+1. User confirm `GrokPhase7TestActor` in Outliner/viewport
+2. Optional: `MaterialInstanceTools.create` from `M_GrokPhase7Test`; `CurveTableTools.create` in `/Game/MCPTest/`
+3. Optional cleanup: `SceneTools.remove_from_scene` on spawned actor
 
 ## Skipped for now
 
