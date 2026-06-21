@@ -1,7 +1,7 @@
 # GrokUE_MCP — Integration Notes
 
 **Last updated:** 2026-06-20  
-**Current phase:** Integration **complete** (Phases 0–6 pass). Ready for daily use and feature work.
+**Current phase:** Phase 7 in progress — expanding toolset coverage. Phases 0–6 pass. **Resume:** `Docs/PHASE7_PROGRESS.md`
 
 This file records what we verified, what failed, and answers to open questions from [PLAN.md](PLAN.md). Update it as each phase completes.
 
@@ -33,6 +33,26 @@ This file records what we verified, what failed, and answers to open questions f
 | 4 | Daily startup/shutdown workflow adopted |
 | 5 | `AGENTS.md`, `/grok-ue-mcp` skill, custom `GrokUEMCPTools` plugin (**20 toolsets**) |
 | 6 | Cursor IDE re-confirmed Phase 3 results (no new capability; see Phase 6) |
+| 7 | **In progress** — read-only probes on Logs, EditorApp, ActorTools (see Phase 7) |
+
+### GrokProjectTools — what it is (no editor window)
+
+There is **no Unreal Editor panel or menu** for GrokProjectTools. It is a **custom Python MCP toolset** registered at startup by `Plugins/GrokUEMCPTools/Content/Python/init_unreal.py`. Grok and Cursor reach it only through MCP:
+
+```
+call_tool(
+  toolset_name: "grok_ue_mcp.toolsets.project_tools.GrokProjectTools",
+  tool_name: "health_check",   # or get_session_info
+  arguments: {}
+)
+```
+
+| Tool | What it does |
+|------|----------------|
+| `health_check` | Returns `GrokUE_MCP: custom toolset healthy` — confirms the plugin loaded |
+| `get_session_info` | Returns project name, project dir, content dir, current level path |
+
+To add more project tools, edit `project_tools.py`, restart the editor, then `ModelContextProtocol.RefreshTools` and re-handshake MCP clients.
 
 ### 3. Where to work next
 
@@ -43,7 +63,7 @@ This file records what we verified, what failed, and answers to open questions f
 | Custom tool authoring rules | `@unreal.ustruct()` for struct returns — **not** `@dataclass` (see Phase 5 hitch below) |
 | Gameplay / content | `Content/` (blank today) |
 | CI / headless MCP | `Docs/PLAN.md` Phase 5 — `-ModelContextProtocolStartServer` (not started) |
-| **Phase 7 — expand coverage** | Test toolsets not yet verified (logs, viewport capture, assets, blueprints) — see Phase 7 below |
+| **Phase 7 — expand coverage** | **`Docs/PHASE7_PROGRESS.md`** — checkpoint after each probe; do not re-run completed batches |
 
 ### 4. Key repo paths
 
@@ -76,6 +96,53 @@ F:\git\GrokUE_MCP\
 | 4 — Repeatable workflow | **Pass** | 2026-06-20 | Daily startup/shutdown checklist adopted |
 | 5 — Grow capabilities | **Pass** | 2026-06-20 | 20 toolsets; `health_check` live-verified from fresh Grok session |
 | 6 — Multi-client regression | **Pass** | 2026-06-20 | Cursor IDE agent: read + write tests; `grok mcp doctor` healthy |
+| 7 — Expand toolset coverage | **In progress** | 2026-06-20 | Batches F/G/H pass; resume at `PHASE7_PROGRESS.md` queue |
+
+---
+
+## Phase 7 — Expand Toolset Coverage (In Progress)
+
+**Goal:** Document what Epic's 19 shipped toolsets can do in this blank project, so repo readers (Grok, Cursor, humans) know what is possible without re-probing.
+
+**Workflow:** One MCP call at a time → record result in this section → update `Docs/PHASE7_PROGRESS.md` queue → commit incrementally.
+
+### Batch F — EditorApp read-only (verified 2026-06-20)
+
+| # | Tool | Result |
+|---|------|--------|
+| F1 | `GetCameraTransform` | **Pass** — viewport camera pose returned |
+| F2 | `IsPIERunning` | **Pass** — `false` |
+| F3 | `GetContentBrowserPath` | **Pass** — `/Game` |
+| F4 | `GetVisibleActors` | **Pass** — 63 actors in viewport frustum (includes PlayerStart, Landscape, lights) |
+
+### Batch G — LogsToolset read-only (verified 2026-06-20)
+
+| # | Tool | Arguments | Result |
+|---|------|-----------|--------|
+| G1 | `GetLogCategories` | `filter: "ModelContextProtocol"` | **Pass** — `LogModelContextProtocol`, `LogModelContextProtocolToolHashMapping` |
+| G2 | `GetLogEntries` | `category: LogModelContextProtocol`, `pattern: "Starting MCP server"`, `maxEntries: 5` | **Pass** — confirms port 8000 bind line |
+
+**Quirk:** `GetLogEntries` schema marks `pattern` as required (use `""` to match all).
+
+### Batch H — ActorTools read-only (verified 2026-06-20)
+
+Test actor: `PlayerStart` — refPath `/Temp/Untitled_1.Untitled_1:PersistentLevel.PlayerStart_UAID_F02F74551BF5599B01_1153002503`
+
+| # | Tool | Result |
+|---|------|--------|
+| H1 | `get_label` | **Pass** — `PlayerStart` |
+| H2 | `get_actor_transform` | **Pass** — (-200, 0, 92), yaw 180° |
+| H3 | `get_tags` | **Pass** — `[]` |
+| H4 | `get_components` | **Pass** — CollisionCapsule, Sprite, Sprite2, Arrow |
+| H5 | `get_actor_bounds` | **Pass** — valid world-space AABB |
+
+### Batch I — Editor imaging read-only (verified 2026-06-20)
+
+| # | Tool | Result |
+|---|------|--------|
+| I1 | `CaptureAssetImage` `/Engine/BasicShapes/Cube` | **Pass** — returns `image/png` base64 thumbnail (omit payload from docs) |
+
+**Next in queue:** see `Docs/PHASE7_PROGRESS.md`.
 
 ---
 
@@ -413,6 +480,7 @@ Use the template in [PLAN.md](PLAN.md) for additional failures.
 
 | Date | Change |
 |------|--------|
+| 2026-06-20 | **Phase 7 started** — `PHASE7_PROGRESS.md` checkpoint; Batches F/G/H/I; GrokProjectTools FAQ in handoff |
 | 2026-06-20 | **Phase 6 pass** — Cursor IDE regression (Batches D/E); `get_session_info` verified; multi-client table |
 | 2026-06-20 | Handoff section + `health_check` Grok session screenshot; integration marked complete |
 | 2026-06-20 | Phase 5 custom toolset **pass** — screenshot + log confirm 20 toolsets after ustruct fix |

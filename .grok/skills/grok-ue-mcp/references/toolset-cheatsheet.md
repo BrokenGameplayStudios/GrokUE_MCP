@@ -21,8 +21,29 @@
 |------|-------|
 | `GetSelectedActors` | No args |
 | `FocusOnActors` | `actors: [{ refPath }]` |
-| `CaptureViewport` | Optional annotations for spatial labels |
-| `GetCameraTransform` | No args |
+| `GetCameraTransform` | No args — Phase 7 verified |
+| `GetVisibleActors` | No args — actors in viewport frustum |
+| `GetContentBrowserPath` | No args — e.g. `/Game` |
+| `IsPIERunning` | No args |
+| `CaptureAssetImage` | `assetPath` — PNG base64; don't log payload |
+| `CaptureViewport` | Optional annotations (large payload) |
+
+## Logs (`EditorToolset.LogsToolset`)
+
+| Tool | Notes |
+|------|-------|
+| `GetLogCategories` | `filter` substring |
+| `GetLogEntries` | `pattern` required; `category`, `maxEntries` |
+
+## Actor (`editor_toolset.toolsets.actor.ActorTools`)
+
+| Tool | Notes |
+|------|-------|
+| `get_label` | `actor.refPath` |
+| `get_actor_transform` | `actor.refPath` |
+| `get_actor_bounds` | `actor.refPath` |
+| `get_components` | `actor.refPath` |
+| `get_tags` | `actor.refPath` |
 
 ## Custom (`grok_ue_mcp.toolsets.project_tools.GrokProjectTools`)
 

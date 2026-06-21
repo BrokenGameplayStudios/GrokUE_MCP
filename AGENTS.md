@@ -5,7 +5,7 @@ Instructions for AI agents (Grok, etc.) working in this Unreal Engine 5.8 projec
 **Canonical repo path:** `F:\git\GrokUE_MCP`  
 **MCP endpoint:** `http://127.0.0.1:8000/mcp` (project-scoped in `.grok/config.toml`)
 
-> **New session?** Integration Phases 0–5 are **complete**. Read `Docs/NOTES.md` → **Handoff** first, load `/grok-ue-mcp`, then run `GrokProjectTools.health_check` before doing anything else.
+> **New session?** Phases 0–6 **complete**; Phase 7 in progress. Read `Docs/NOTES.md` → **Handoff**, then **`Docs/PHASE7_PROGRESS.md`** for the next probe. Load `/grok-ue-mcp`, run `GrokProjectTools.health_check`.
 
 ---
 
