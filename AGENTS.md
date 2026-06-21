@@ -13,7 +13,9 @@ Instructions for AI agents (Grok, etc.) working in this Unreal Engine 5.8 projec
 2. **MCP server must be listening** — Output Log should show `Starting MCP server on port 8000`.
 3. **Grok must be launched from the repo root** so `.grok/config.toml` loads.
 4. **Startup order:** UE first → Grok second.
-5. After an **editor restart**, re-handshake MCP in Grok: `/mcps` → press **`r`**.
+5. After an **editor restart**, re-handshake **all** MCP clients (session IDs are invalidated):
+   - Grok TUI → `/mcps` → **`r`**
+   - Cursor / IDE agents → restart the Grok session or reconnect `unreal-mcp`
 
 ---
 

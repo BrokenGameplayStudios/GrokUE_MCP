@@ -1,7 +1,7 @@
 # GrokUE_MCP — Integration Notes
 
 **Last updated:** 2026-06-20  
-**Current phase:** 5 — Grow capabilities (AGENTS.md + skill + custom plugin scaffolded; editor verify pending)
+**Current phase:** 5 — Grow capabilities (custom toolset verified; MCP tool calls pending Grok session confirm)
 
 This file records what we verified, what failed, and answers to open questions from [PLAN.md](PLAN.md). Update it as each phase completes.
 
@@ -16,7 +16,7 @@ This file records what we verified, what failed, and answers to open questions f
 | 2 — Connect Grok | **Pass** | 2026-06-20 | `unreal-mcp` shows **ready** in `/mcps` |
 | 3 — First connection tests | **Pass** | 2026-06-20 | Batches A/B/C verified — spawn, focus, remove `GrokTestCube` end-to-end |
 | 4 — Repeatable workflow | **Pass** | 2026-06-20 | Daily startup/shutdown checklist adopted; health check returns 19 toolsets |
-| 5 — Grow capabilities | **In progress** | 2026-06-20 | `AGENTS.md`, `/grok-ue-mcp` skill, `GrokUEMCPTools` plugin — verify after editor restart |
+| 5 — Grow capabilities | **Pass** (CI TBD) | 2026-06-20 | Custom toolset registered — 20 toolsets; `GrokProjectTools` in Output Log |
 
 ---
 
@@ -197,7 +197,7 @@ Not required for daily use. See PLAN.md § 4.3 if you want Grok inside the UE Te
 |-----------|--------|----------|
 | **AGENTS.md** | Done | Repo root — agent conventions for Grok + UE MCP |
 | **Grok skill** | Done | `.grok/skills/grok-ue-mcp/` — invoke via `/grok-ue-mcp` |
-| **Custom Python toolset** | Fix applied | `Plugins/GrokUEMCPTools/` — failed on first load (see hitch); **restart required** to verify |
+| **Custom Python toolset** | **Pass** | `Plugins/GrokUEMCPTools/` — registered after `ustruct` fix + editor restart (screenshot below) |
 | **CI / headless** | Not started | `-ModelContextProtocolStartServer` CLI flag (advanced) |
 
 ### Custom plugin: GrokUEMCPTools
@@ -217,11 +217,19 @@ New plugins need a full editor restart (not just `RefreshTools` on first enable)
 
 1. Restart Unreal Editor (or close/reopen `GrokUE_MCP.uproject`).
 2. Output Log → look for `Registering Toolset grok_ue_mcp.toolsets.project_tools.GrokProjectTools`.
-3. Grok `/mcps` → `r` to re-handshake.
+3. Re-handshake **every** MCP client connected to UE (editor restart invalidates session IDs):
+   - Grok TUI → `/mcps` → **`r`**
+   - Cursor / other IDE agents → restart Grok session or reconnect `unreal-mcp`
 4. `list_toolsets` → **20** toolsets.
 5. `call_tool` → `GrokProjectTools.health_check` → `GrokUE_MCP: custom toolset healthy`.
 
-If the toolset is missing after restart, run `ModelContextProtocol.RefreshTools` in the UE console and re-handshake Grok.
+![Phase 5 — custom toolset registered in Output Log](images/phase5-custom-toolset-registered.jpg)
+
+*Output Log after successful reload: `Registering Toolset grok_ue_mcp.toolsets.project_tools.GrokProjectTools` among 20 toolsets. No `LogPython: Error` from `init_unreal.py`.*
+
+**Verified (2026-06-20):** `Saved/Logs/GrokUE_MCP.log` shows `init_unreal.py` completed in ~638 ms, custom toolset registered at count 4, final `20 toolsets discoverable via list_toolsets`.
+
+If the toolset is missing after restart, run `ModelContextProtocol.RefreshTools` in the UE console and re-handshake all MCP clients.
 
 **If `init_unreal.py` failed on startup** (Python traceback in Output Log), fix the `.py` files and **restart the editor** — `RefreshTools` does not re-run `init_unreal.py`.
 
@@ -287,6 +295,7 @@ Use the template in [PLAN.md](PLAN.md) for additional failures.
 
 | Date | Change |
 |------|--------|
+| 2026-06-20 | Phase 5 custom toolset **pass** — screenshot + log confirm 20 toolsets after ustruct fix |
 | 2026-06-20 | Hitch fix — `GrokSessionInfo` must be `@unreal.ustruct()`, not `@dataclass`; documented in Phase 5 |
 | 2026-06-20 | Phase 5 started — `AGENTS.md`, `/grok-ue-mcp` skill, `GrokUEMCPTools` plugin scaffolded |
 | 2026-06-20 | **Phase 4 pass** — adopted startup/shutdown checklist; health check verified (19 toolsets) |

@@ -12,6 +12,7 @@ This repo is not a game prototype. It exists to document, test, and stabilize a 
 
 | Date | Update |
 |------|--------|
+| **2026-06-20** | **Phase 5 pass** — custom `GrokProjectTools` registered (20 toolsets); ustruct hitch documented. |
 | **2026-06-20** | **Phase 5 started** — `AGENTS.md`, `/grok-ue-mcp` skill, `GrokUEMCPTools` custom MCP plugin. |
 | **2026-06-20** | **Phase 4 pass** — repeatable startup/shutdown workflow adopted; health check documented in `Docs/NOTES.md`. |
 | **2026-06-20** | **Phase 3 complete** — Batches A/B/C verified (spawn, focus, remove cube with screenshots). See `Docs/NOTES.md`. |
@@ -28,24 +29,24 @@ This repo is not a game prototype. It exists to document, test, and stabilize a 
 
 | Area | Status |
 |------|--------|
-| **Integration phase** | Phase 5 **in progress** — custom toolset verify after editor restart |
+| **Integration phase** | Phase 5 **complete** (CI/headless optional future work) |
 | **Unreal project** | Blank Blueprint template, UE 5.8 |
 | **MCP server** | Epic **Unreal MCP** enabled; auto-start on `http://127.0.0.1:8000/mcp` |
 | **Grok config** | Project-scoped `.grok/config.toml`; `unreal-mcp` reports **ready** in `/mcps` |
-| **Next step** | Restart UE → verify 20 toolsets + `GrokProjectTools.health_check` (see `Docs/NOTES.md` § Phase 5) |
+| **Next step** | Use `/grok-ue-mcp` skill for daily sessions; extend `GrokProjectTools` as needed |
 
 ### What works today
 
 - Grok connects to Unreal MCP over HTTP; meta-tools (`list_toolsets`, `describe_toolset`, `call_tool`) respond.
 - Scene inspection (`find_actors`, `get_current_level`) and light writes (spawn, focus viewport, remove actor) verified.
 - Repeatable daily session workflow (startup, health check, shutdown) in `Docs/NOTES.md` § Phase 4.
-- `AGENTS.md` agent conventions, `/grok-ue-mcp` project skill, `GrokUEMCPTools` plugin scaffolded.
+- `AGENTS.md` agent conventions, `/grok-ue-mcp` project skill, custom `GrokProjectTools` MCP toolset (20 toolsets total).
 - Read-only AgentSkill queries work (empty project returns no skills).
 
 ### What does not work yet
 
-- Custom `GrokProjectTools` not yet verified in editor (restart required after new plugin).
 - No gameplay content.
+- CI/headless MCP (`-ModelContextProtocolStartServer`) not explored.
 
 ---
 
