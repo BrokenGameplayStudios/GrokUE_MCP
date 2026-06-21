@@ -184,11 +184,15 @@ Test actor: `PlayerStart` — refPath `/Temp/Untitled_1.Untitled_1:PersistentLev
 | V2 | `get_parent` | new Blueprint ref | **Pass** — parent `/Script/Engine.Actor` |
 | V3 | `list_graphs` | new Blueprint ref | **Pass** — `EventGraph`, `UserConstructionScript` |
 | V4 | `save_assets` | `asset_paths: ["/Game/Developers/BP_GrokPhase7Test"]` | **Pass** — writes `Content/Developers/BP_GrokPhase7Test.uasset` |
-| V5 | `move` | → `/Game/Developers/Brian/BP_GrokPhase7Test` | **Pass** — final path under per-user Developers folder |
+| V5 | `move` | → `/Game/Developers/Brian/BP_GrokPhase7Test` | **Pass on disk** — Content Browser still empty (Developers folder hidden) |
+| V6 | `move` | → `/Game/MCPTest/BP_GrokPhase7Test` + `save_assets` | **Pass** — `SetContentBrowserPath` navigates to `/Game/MCPTest` |
 
-**Hitch:** `BlueprintTools.create` does not persist to disk. MCP `exists` / `find_assets` can report the asset while Content Browser stays empty until `AssetTools.save_assets`. Always save after create; prefer `/Game/Developers/<YourName>/` over bare `/Game/Developers/`.
+**Hitches:**
+- `BlueprintTools.create` does not persist to disk — call `AssetTools.save_assets` immediately after.
+- Assets under `/Game/Developers/` may exist on disk and in the asset registry but **Content Browser hides them** unless **View Options → Show Developers Content** is enabled. `SetContentBrowserPath` to Developers paths fails (snaps back to `/Game`).
+- For MCP test assets, use a normal content path like `/Game/MCPTest/`.
 
-**Test asset:** `/Game/Developers/Brian/BP_GrokPhase7Test` — refresh Content Browser. Graph-level probes now unblocked.
+**Test asset:** `/Game/MCPTest/BP_GrokPhase7Test` — should appear after Content Browser navigates to `MCPTest`.
 
 ### Batch N — CaptureViewport (2026-06-20)
 
@@ -572,6 +576,7 @@ Editor restarts invalidate MCP session IDs. If Grok reports `Unknown session id`
 
 | Date | Issue | Resolution |
 |------|-------|------------|
+| 2026-06-20 | `/Game/Developers/` assets invisible in Content Browser | Enable **Show Developers Content**, or create under `/Game/<Folder>/` (e.g. `MCPTest`); see Batch V |
 | 2026-06-20 | `BlueprintTools.create` — returns refPath but no `.uasset` until `save_assets` | Call `AssetTools.save_assets` immediately after create; see Batch V |
 | 2026-06-20 | `CaptureViewport` — `{}` rejected; optional `captureTransform` and `annotations` lack binding defaults | Pass both explicitly from `GetCameraTransform` + minimal annotations; see Batch N |
 | 2026-06-20 | `GrokProjectTools` — dataclass return type broke `@unreal.uclass()` generation | Use `@unreal.ustruct()`; restart editor after fix |

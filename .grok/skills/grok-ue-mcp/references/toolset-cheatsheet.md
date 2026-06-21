@@ -80,7 +80,7 @@ Write-only: `add_cube`, `add_sphere`, `add_cylinder`, `add_cone` — adds mesh c
 | Tool | Notes |
 |------|-------|
 | `get_graph_dsl_docs` | No blueprint needed — DSL grammar |
-| `create` | `folder_path`, `asset_name`, `asset_type.refPath` — then **`save_assets`** (create alone is in-memory only) |
+| `create` | `folder_path`, `asset_name`, `asset_type.refPath` — then **`save_assets`**; use `/Game/MCPTest/` not `/Game/Developers/` (CB hides Developers) |
 | `get_parent` / `list_graphs` | `blueprint.refPath` |
 | `read_graph_dsl` / `write_graph_dsl` | Needs graph ref from `list_graphs` |
 
