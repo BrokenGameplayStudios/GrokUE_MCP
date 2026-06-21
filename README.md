@@ -12,7 +12,9 @@ This repo is not a game prototype. It exists to document, test, and stabilize a 
 
 | Date | Update |
 |------|--------|
-| **2026-06-20** | Phase 2–3 started: Unreal MCP connected; Grok `/mcps` shows `unreal-mcp [ready]`. Batch A meta-tool tests pass. `EditorToolset` enabled in `.uproject` for upcoming scene tests. See `Docs/NOTES.md`. |
+| **2026-06-20** | **Phase 3 complete** — Batches A/B/C verified (spawn, focus, remove cube with screenshots). See `Docs/NOTES.md`. |
+| **2026-06-20** | Phase 3 Batch A verified (screenshot); editor restart registers **19 toolsets** including `SceneTools`. Batch B scene tests ready. See `Docs/NOTES.md`. |
+| **2026-06-20** | Phase 2–3 started: Unreal MCP connected; Grok `/mcps` shows `unreal-mcp [ready]`. Batch A meta-tool tests pass. `EditorToolset` enabled in `.uproject`. |
 | **2026-06-20** | Initial scaffold committed: blank UE 5.8 project (`GrokUE_MCP.uproject`), standard `Config/`, integration plan in `Docs/PLAN.md`, and project-scoped Grok MCP config (`.grok/config.toml` → `http://127.0.0.1:8000/mcp`). MCP plugin not yet enabled in editor. |
 | **2026-06-20** | Repository created. Blank UE project built locally at `F:\UEDEV\GrokUE_MCP`, copied into `F:\git\GrokUE_MCP` for version control. |
 
@@ -24,21 +26,22 @@ This repo is not a game prototype. It exists to document, test, and stabilize a 
 
 | Area | Status |
 |------|--------|
-| **Integration phase** | Phase 3 — first connection tests (Batch A pass; Batch B/C pending editor restart) |
+| **Integration phase** | Phase 3 **complete** — Phase 4 (repeatable workflow) next |
 | **Unreal project** | Blank Blueprint template, UE 5.8 |
 | **MCP server** | Epic **Unreal MCP** enabled; auto-start on `http://127.0.0.1:8000/mcp` |
 | **Grok config** | Project-scoped `.grok/config.toml`; `unreal-mcp` reports **ready** in `/mcps` |
-| **Next step** | Restart UE editor (EditorToolset) → run Batch B/C tests in `Docs/NOTES.md` |
+| **Next step** | Adopt Phase 4 daily session checklist in `Docs/PLAN.md` |
 
 ### What works today
 
 - Grok connects to Unreal MCP over HTTP; meta-tools (`list_toolsets`, `describe_toolset`, `call_tool`) respond.
+- Scene inspection (`find_actors`, `get_current_level`) and light writes (spawn, focus viewport, remove actor) verified.
 - Read-only AgentSkill queries work (empty project returns no skills).
-- Integration notes and Phase 3 test batches documented in `Docs/NOTES.md`.
+- Phase 3 test results and screenshots documented in `Docs/NOTES.md`.
 
 ### What does not work yet
 
-- Scene/actor/spawn prompts from the plan — **EditorToolset** was just enabled; editor restart required.
+- No repeatable daily workflow adopted yet (Phase 4).
 - No custom project toolsets or gameplay content.
 
 ---
