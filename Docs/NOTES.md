@@ -1,7 +1,7 @@
 # GrokUE_MCP — Integration Notes
 
 **Last updated:** 2026-06-20  
-**Current phase:** Phase 7 **complete**. Phases 0–7 pass. **Resume:** `Docs/PHASE8_PLAN.md`
+**Current phase:** Phase 8 in progress — integrated content pipeline. **Resume:** `Docs/PHASE8_PROGRESS.md` → `Docs/PHASE8_PLAN.md`
 
 This file records what we verified, what failed, and answers to open questions from [PLAN.md](PLAN.md). Update it as each phase completes.
 
@@ -99,6 +99,30 @@ F:\git\GrokUE_MCP\
 | 5 — Grow capabilities | **Pass** | 2026-06-20 | 20 toolsets; `health_check` live-verified from fresh Grok session |
 | 6 — Multi-client regression | **Pass** | 2026-06-20 | Cursor IDE agent: read + write tests; `grok mcp doctor` healthy |
 | 7 — Expand toolset coverage | **Pass** | 2026-06-20 | All 19 Epic toolsets cataloged/probed (Batches F–AG); `L_Grok` + `/Game/MCPTest/`; see Phase 7 summary |
+| 8 — Integrated content pipeline | **In progress** | 2026-06-20 | Batch H1 pass — material/MF/MI/DT/BP/spawn; PIE verify pending; `PHASE8_PROGRESS.md` |
+
+---
+
+## Phase 8 — Integrated Content Pipeline (In Progress)
+
+**Goal:** Chain MCP tools to build content with logic — material stack + DataTable + Blueprint `write_graph_dsl` + spawned actor. See `Docs/PHASE8_PLAN.md`.
+
+### Batch H1 — Full vertical slice (verified 2026-06-20, PIE pending)
+
+| # | Step | Result |
+|---|------|--------|
+| H1a | `create_material` `M_GrokPhase8` | **Pass** — + `save_assets` |
+| H1b | `create_function` `MF_GrokPhase8` + scalar `GrokTint` + function output | **Pass** — `add_expression`, `connect_expressions`, `recompile` |
+| H1c | Wire MF into material (Constant3Vector × GrokTint → `MP_BaseColor`) | **Pass** |
+| H1d | `MaterialInstanceTools.create` `M_GrokPhase8_Inst` + `set_scalar_parameter` 0.85 | **Pass** |
+| H1e | `DataTableTools.create` `DT_GrokPhase8_Strings` + 3 `mirroredName` rows | **Pass** |
+| H1f | `BlueprintTools.create` `BP_GrokPhase8` + `GrokStringTable` var + CDO default DT | **Pass** — compile required before `set_properties` on CDO |
+| H1g | `write_graph_dsl` BeginPlay: `GetDataTableColumnasString` → `ForEachLoop` → `PrintString` | **Pass** — property `"mirroredName"` |
+| H1h | Spawn `GrokPhase8Actor` + `PrimitiveTools.add_cube` + MI on `GrokMesh` | **Pass** — at (0,200,100) in `L_Grok` |
+
+**Note:** Struct field `.mirroredName` not supported in DSL expressions; used `DataTable|GetDataTableColumnasString` instead.
+
+**Spawned actor refPath:** `/Game/Maps/L_Grok.L_Grok:PersistentLevel.BP_GrokPhase8_C_UAID_D8BBC1098290BFE602_1385681993` (session-specific; re-spawn after map reload).
 
 ---
 

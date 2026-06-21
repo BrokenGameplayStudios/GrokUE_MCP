@@ -1,6 +1,6 @@
 # Phase 8 — Integrated content creation (planned)
 
-**Status:** Not started. Resume Phase 7 wrap-up first, then use this as the multi-tool integration target.
+**Status:** In progress — checkpoint `Docs/PHASE8_PROGRESS.md`.
 
 **Goal:** Prove MCP can chain asset types with **logic** — each step is basic alone; the full pipeline is the stress test.
 
@@ -28,16 +28,12 @@ Build a small vertical slice in `/Game/MCPTest/` on level `/Game/Maps/L_Grok`:
 | ObjectTools set/get properties | AG |
 | StringTable / DataTable string data | AD, AF |
 
-## Open probes before Phase 8
+## Open probes (remaining)
 
-| Item | Toolset | Notes |
-|------|---------|-------|
-| Material function asset | `MaterialTools` | Not probed — may need `create_material` with function flag or separate API |
-| Material expression graph write | `MaterialTools` | `add_expression`, `connect_expressions`, `recompile` |
-| Blueprint `write_graph_dsl` | `BlueprintTools` | ForEach + Get DataTable Row + Print String |
-| Static mesh on Blueprint | `PrimitiveTools` or component via Blueprint | `add_cube` attaches to actor ref |
-| Assign material to mesh | `StaticMeshTools.set_material` or Blueprint pin | |
-| PIE / runtime verify | `EditorAppToolset` | `StartPIE` skipped in Phase 7 — optional for print verification |
+| Item | Toolset | Status |
+|------|---------|--------|
+| PIE / runtime verify | `EditorAppToolset` | Pending — user Output Log or `StartPIE` |
+| Persist spawn in git | save `L_Grok` | Pending — user save map |
 
 ## Suggested execution order (one MCP call at a time)
 
