@@ -12,6 +12,7 @@ This repo is not a game prototype. It exists to document, test, and stabilize a 
 
 | Date | Update |
 |------|--------|
+| **2026-06-20** | **Integration complete** — handoff in `Docs/NOTES.md`; `health_check` live-verified from fresh Grok session. |
 | **2026-06-20** | **Phase 5 pass** — custom `GrokProjectTools` registered (20 toolsets); ustruct hitch documented. |
 | **2026-06-20** | **Phase 5 started** — `AGENTS.md`, `/grok-ue-mcp` skill, `GrokUEMCPTools` custom MCP plugin. |
 | **2026-06-20** | **Phase 4 pass** — repeatable startup/shutdown workflow adopted; health check documented in `Docs/NOTES.md`. |
@@ -33,7 +34,7 @@ This repo is not a game prototype. It exists to document, test, and stabilize a 
 | **Unreal project** | Blank Blueprint template, UE 5.8 |
 | **MCP server** | Epic **Unreal MCP** enabled; auto-start on `http://127.0.0.1:8000/mcp` |
 | **Grok config** | Project-scoped `.grok/config.toml`; `unreal-mcp` reports **ready** in `/mcps` |
-| **Next step** | Use `/grok-ue-mcp` skill for daily sessions; extend `GrokProjectTools` as needed |
+| **Next step** | New Grok session → `Docs/NOTES.md` **Handoff** → `/grok-ue-mcp` → `health_check` |
 
 ### What works today
 
@@ -103,6 +104,12 @@ Epic's built-in **Unreal MCP** plugin is the primary integration path. See [Epic
 **Startup order:** Unreal Editor first (MCP server must be listening), then Grok.
 
 ---
+
+## New Grok session?
+
+1. Open UE + launch `grok` from `F:\git\GrokUE_MCP`
+2. Read **`Docs/NOTES.md` → Handoff** (integration is complete — do not re-run Phase 3 unless regressing)
+3. Load **`/grok-ue-mcp`** and call **`GrokProjectTools.health_check`**
 
 ## Documentation
 
