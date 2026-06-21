@@ -1,131 +1,153 @@
 # GrokUE_MCP
 
-A blank **Unreal Engine 5.8** Blueprint project and integration workspace for connecting **[Grok](https://x.ai)** to **Unreal Editor** via the **Model Context Protocol (MCP)**.
+A blank **Unreal Engine 5.8** Blueprint project and integration workspace for connecting **[Grok](https://x.ai)** (and other MCP clients) to **Unreal Editor** via Epic's built-in **Model Context Protocol (MCP)** plugin.
 
-This repo is not a game prototype. It exists to document, test, and stabilize a repeatable workflow where Grok can inspect and manipulate the editor through natural language — spawning actors, querying the scene, driving Blueprint tooling, and eventually project-specific automation.
+This repo is not a game prototype. It exists to **prove, document, and stabilize** a workflow where an AI agent inspects and manipulates the editor through MCP — scene tools, asset pipelines, Blueprint authoring, custom project toolsets, and web-sourced mesh import.
 
 **Maintained by:** [Broken Gameplay Studios](https://github.com/BrokenGameplayStudios)
 
 ---
 
-## Recent Updates
-
-| Date | Update |
-|------|--------|
-| **2026-06-20** | **Phase 6 pass** — Cursor IDE re-confirmed Phase 3 results; multi-client note in `Docs/NOTES.md`. |
-| **2026-06-20** | **Integration complete** — handoff in `Docs/NOTES.md`; `health_check` live-verified from fresh Grok session. |
-| **2026-06-20** | **Phase 5 pass** — custom `GrokProjectTools` registered (20 toolsets); ustruct hitch documented. |
-| **2026-06-20** | **Phase 5 started** — `AGENTS.md`, `/grok-ue-mcp` skill, `GrokUEMCPTools` custom MCP plugin. |
-| **2026-06-20** | **Phase 4 pass** — repeatable startup/shutdown workflow adopted; health check documented in `Docs/NOTES.md`. |
-| **2026-06-20** | **Phase 3 complete** — Batches A/B/C verified (spawn, focus, remove cube with screenshots). See `Docs/NOTES.md`. |
-| **2026-06-20** | Phase 3 Batch A verified (screenshot); editor restart registers **19 toolsets** including `SceneTools`. Batch B scene tests ready. See `Docs/NOTES.md`. |
-| **2026-06-20** | Phase 2–3 started: Unreal MCP connected; Grok `/mcps` shows `unreal-mcp [ready]`. Batch A meta-tool tests pass. `EditorToolset` enabled in `.uproject`. |
-| **2026-06-20** | Initial scaffold committed: blank UE 5.8 project (`GrokUE_MCP.uproject`), standard `Config/`, integration plan in `Docs/PLAN.md`, and project-scoped Grok MCP config (`.grok/config.toml` → `http://127.0.0.1:8000/mcp`). MCP plugin not yet enabled in editor. |
-| **2026-06-20** | Repository created. Blank UE project built locally at `F:\UEDEV\GrokUE_MCP`, copied into `F:\git\GrokUE_MCP` for version control. |
-
-*Add new rows at the top of this table as the project progresses.*
-
----
-
-## Current State
+## Integration status (2026-06-21)
 
 | Area | Status |
 |------|--------|
-| **Integration phase** | Phase 6 **complete** (CI/headless optional future work) |
-| **Unreal project** | Blank Blueprint template, UE 5.8 |
-| **MCP server** | Epic **Unreal MCP** enabled; auto-start on `http://127.0.0.1:8000/mcp` |
-| **Grok config** | Project-scoped `.grok/config.toml`; `unreal-mcp` reports **ready** in `/mcps` |
-| **Next step** | New Grok session → `Docs/NOTES.md` **Handoff** → `/grok-ue-mcp` → `health_check` |
+| **Phases 0–8** | **Complete** — see [Docs/NOTES.md](Docs/NOTES.md) |
+| **Epic MCP toolsets** | **19** cataloged and probed (Phase 7) |
+| **Custom toolset** | `GrokProjectTools` — **20 toolsets** total when plugin enabled |
+| **Test level** | `/Game/Maps/L_Grok` (`EditorStartupMap` in `Config/DefaultEngine.ini`) |
+| **Test assets** | `/Game/MCPTest/` — Phase 8 material, DataTable, Blueprint, Kenney meshes |
+| **Next (optional)** | Phase 2 geo: DEM → heightmap → landscape (no Landscape MCP toolset yet) |
 
-### What works today
+### What this project validated
 
-- Grok connects to Unreal MCP over HTTP; meta-tools (`list_toolsets`, `describe_toolset`, `call_tool`) respond.
-- Scene inspection (`find_actors`, `get_current_level`) and light writes (spawn, focus viewport, remove actor) verified.
-- Repeatable daily session workflow (startup, health check, shutdown) in `Docs/NOTES.md` § Phase 4.
-- `AGENTS.md` agent conventions, `/grok-ue-mcp` project skill, custom `GrokProjectTools` MCP toolset (20 toolsets total).
-- **Cursor IDE** agents can drive the same MCP bridge as Grok TUI (Phase 6 re-confirmed).
-- Read-only AgentSkill queries work (empty project returns no skills).
+The integration was run as **hands-off as practical**: the agent drove MCP tool calls from Grok/Cursor; the human mainly kept the editor open, confirmed viewport/PIE results, saved the level, and restarted the editor when required.
 
-### What does not work yet
+**All documentation under `Docs/` was written during the test** — phase plans, progress checkpoints, verified results, screenshots, and hitch notes are part of the deliverable, not a separate doc pass.
 
-- No gameplay content.
-- CI/headless MCP (`-ModelContextProtocolStartServer`) not explored.
+| Capability | Verified |
+|------------|----------|
+| MCP connect (HTTP `127.0.0.1:8000/mcp`) | Phases 2–3 |
+| Meta-tools: `list_toolsets`, `describe_toolset`, `call_tool` | Phase 3 |
+| Scene read/write (actors, spawn, focus, remove) | Phases 3, 7 |
+| All 19 shipped Epic toolsets (read + selective write probes) | Phase 7 |
+| Custom `GrokProjectTools` (`health_check`, `get_session_info`) | Phases 5–6 |
+| Multi-client (Grok TUI + Cursor IDE) | Phase 6 |
+| Integrated content pipeline (material → MI → DataTable → BP graph → PIE) | Phase 8 H1 |
+| Web mesh import (`import_file` FBX/OBJ + Kenney scaler script) | Phase 8 H2 |
+| `ProgrammaticToolset`, `AgentSkillToolset`, EditorApp (incl. viewport capture) | Phase 7 |
+
+**Not exercised / deferred:** `StartPIE`/`StopPIE` automation, `SkeletalMeshTools` (no rigged asset), glTF/GLB import (rejected by `FbxFactory`), CI headless `-ModelContextProtocolStartServer`, real-world terrain pipeline.
 
 ---
 
-## Quick Start
+## Human steps you still need
 
-**Prerequisites:** Unreal Engine 5.8, [Grok CLI](https://x.ai) installed and authenticated.
+MCP covers editor automation, not full unattended operation. Expect to:
 
-1. Clone this repo and open `GrokUE_MCP.uproject` in the UE 5.8 editor.
-2. Follow the phased setup in **[Docs/PLAN.md](Docs/PLAN.md)** — enable the Unreal MCP plugin, auto-start the server, then launch Grok from the project root.
-3. Run the Phase 3 connection tests in the plan to confirm the bridge is live.
+| When | You do |
+|------|--------|
+| **Every session** | Open `GrokUE_MCP.uproject` first; confirm Output Log shows MCP on port **8000**; launch Grok from repo root |
+| **After editor restart** | Re-handshake MCP clients — Grok TUI: `/mcps` → **`r`**; Cursor: restart Grok session |
+| **After custom plugin / Python toolset changes** | **Full editor restart** (first enable or `init_unreal.py` failure); then `ModelContextProtocol.RefreshTools` if needed |
+| **Visual verification** | Confirm spawns in Outliner/viewport; **Ctrl+S** to save `L_Grok` (spawns live in `__ExternalActors__`, gitignored) |
+| **PIE checks** | Press Play in editor (H1 prints DataTable strings — not automated via MCP in this pass) |
+
+**Not tested in this repo:** whether MCP can restart the editor or replace a manual restart. That remains a possible follow-up; today, restarts are a human step.
+
+---
+
+## Quick start (returning session)
+
+**Prerequisites:** Unreal Engine 5.8, [Grok CLI](https://x.ai) authenticated.
 
 ```powershell
 cd F:\git\GrokUE_MCP
+# 1. Open GrokUE_MCP.uproject in UE 5.8 (wait for MCP server on port 8000)
 grok
-# In the TUI: /mcps → confirm unreal-mcp is enabled
+# 2. In TUI: /mcps → unreal-mcp [ready]  (press r after any editor restart)
+# 3. Load skill: /grok-ue-mcp
+# 4. Health check via MCP: GrokProjectTools.health_check
 ```
+
+New session checklist: [Docs/NOTES.md](Docs/NOTES.md) → **Handoff** · [AGENTS.md](AGENTS.md) · skill `.grok/skills/grok-ue-mcp/SKILL.md`
+
+First-time setup (enable plugin, Grok config): [Docs/PLAN.md](Docs/PLAN.md) Phases 0–2.
 
 ---
 
-## Repository Layout
+## Architecture
+
+```
+Grok / Cursor  ──HTTP MCP──►  Unreal Editor (Unreal MCP plugin, port 8000)
+                                    ├── 19 Epic Python toolsets
+                                    └── GrokUEMCPTools → GrokProjectTools
+```
+
+- **Endpoint:** `http://127.0.0.1:8000/mcp` (project-scoped in `.grok/config.toml`)
+- **Discovery:** `list_toolsets` → `describe_toolset` → `call_tool` (one tool call at a time on the game thread)
+- **Epic docs:** [Unreal MCP in Unreal Editor](https://dev.epicgames.com/documentation/unreal-engine/unreal-mcp-in-unreal-editor?lang=en-US)
+
+---
+
+## Repository layout
 
 ```
 GrokUE_MCP/
-├── GrokUE_MCP.uproject   # UE 5.8 project file
-├── Config/               # Engine config (DefaultEngine, Input, etc.)
-├── Content/              # Blank — no gameplay assets yet
-├── Docs/
-│   ├── PLAN.md           # Full integration plan, phases, troubleshooting
-│   ├── NOTES.md          # Phase results, test batches, open questions
-│   └── images/           # Screenshots for documentation
-├── .grok/
-│   ├── config.toml       # Project-scoped Grok MCP server config
-│   └── skills/grok-ue-mcp/  # Project skill: /grok-ue-mcp
+├── GrokUE_MCP.uproject      # UE 5.8; EditorToolset + GrokUEMCPTools enabled
+├── Config/                  # DefaultEngine.ini → L_Grok startup map
+├── Content/
+│   ├── Maps/L_Grok          # Test level
+│   └── MCPTest/             # Phase 7–8 test assets
 ├── Plugins/GrokUEMCPTools/  # Custom Python MCP toolsets
-├── AGENTS.md             # Grok agent conventions for this project
-└── README.md             # This file
+├── ImportedAssets/          # Downloaded meshes (gitignored); scripts/ tracked
+│   └── scripts/scale_obj_to_ue_cm.py   # Kenney OBJ → UE-sized import
+├── Docs/
+│   ├── PLAN.md              # Full integration plan (Phases 0–8)
+│   ├── NOTES.md             # Verified results, handoff, screenshots index
+│   ├── PHASE7_PROGRESS.md   # Phase 7 archive
+│   ├── PHASE8_PLAN.md       # Phase 8 plan + success criteria
+│   ├── PHASE8_PROGRESS.md   # Current checkpoint — start here after pull
+│   └── images/              # Regression / pass screenshots
+├── .grok/
+│   ├── config.toml          # unreal-mcp server URL
+│   └── skills/grok-ue-mcp/  # Slash skill: /grok-ue-mcp
+├── AGENTS.md                # Agent conventions (read first in Cursor)
+└── README.md
 ```
 
-Generated UE folders (`Saved/`, `Intermediate/`, `DerivedDataCache/`, `Binaries/`) are gitignored and stay local.
+`Saved/`, `Intermediate/`, `DerivedDataCache/`, `Binaries/`, and `Content/__ExternalActors__/` are gitignored.
 
 ---
 
-## Architecture (Target)
-
-```
-Grok CLI  ──HTTP MCP──►  Unreal Editor (Unreal MCP plugin)
-                              └── Toolset Registry → engine tools
-```
-
-Default endpoint: `http://127.0.0.1:8000/mcp`
-
-Epic's built-in **Unreal MCP** plugin is the primary integration path. See [Epic's UE 5.8 documentation](https://dev.epicgames.com/documentation/unreal-engine/unreal-mcp-in-unreal-editor?lang=en-US). A community fallback (`chongdashu/unreal-mcp`) is documented in `Docs/PLAN.md` if the built-in plugin cannot be enabled.
-
-**Startup order:** Unreal Editor first (MCP server must be listening), then Grok.
-
----
-
-## New Grok session?
-
-1. Open UE + launch `grok` from `F:\git\GrokUE_MCP`
-2. Read **`Docs/NOTES.md` → Handoff** (integration is complete — do not re-run Phase 3 unless regressing)
-3. Load **`/grok-ue-mcp`** and call **`GrokProjectTools.health_check`**
-
-## Documentation
+## Documentation map
 
 | Document | Purpose |
 |----------|---------|
-| [Docs/PLAN.md](Docs/PLAN.md) | Step-by-step integration phases, test prompts, hitch-report template |
-| [Docs/NOTES.md](Docs/NOTES.md) | Verified results, Phase 3 test batches, findings |
-| [README.md](README.md) | Project overview, current state, changelog (this file) |
+| [Docs/PHASE8_PROGRESS.md](Docs/PHASE8_PROGRESS.md) | **Resume here** — latest checkpoint, Kenney import recipe |
+| [Docs/NOTES.md](Docs/NOTES.md) | Full test history, handoff, hitch screenshots |
+| [Docs/PLAN.md](Docs/PLAN.md) | Original phased plan, troubleshooting, hitch template |
+| [Docs/PHASE7_PROGRESS.md](Docs/PHASE7_PROGRESS.md) | Phase 7 toolset probe archive |
+| [Docs/PHASE8_PLAN.md](Docs/PHASE8_PLAN.md) | Phase 8 goals and success criteria |
+| [AGENTS.md](AGENTS.md) | MCP rules, one-call-at-a-time, health checks |
 
 ---
 
-## Reporting Issues
+## Recent updates
 
-When something fails during setup, use the **Hitch Report** template in `Docs/PLAN.md` and paste it into your Grok session. Include `LogModelContextProtocol` lines from the UE Output Log and output from `grok mcp doctor unreal-mcp`.
+| Date | Update |
+|------|--------|
+| **2026-06-21** | **Phase 8 complete** — H2 Kenney web import (`scale_obj_to_ue_cm.py`, `--kenney-ue`); final screenshot `Docs/images/phase8-h2-kenney-imports-final.jpg`. |
+| **2026-06-20** | **Phase 8 H1** — material + DataTable + Blueprint `write_graph_dsl` + PIE prints. |
+| **2026-06-20** | **Phase 7 complete** — all 19 Epic toolsets cataloged/probed; `L_Grok` + `/Game/MCPTest/`. |
+| **2026-06-20** | **Phases 3–6** — scene tests, daily workflow, `GrokProjectTools`, Cursor multi-client. |
+| **2026-06-20** | **Phases 0–2** — UE 5.8 scaffold, MCP plugin enabled, Grok connected. |
+
+---
+
+## Reporting issues
+
+Use the **Hitch Report** template in [Docs/PLAN.md](Docs/PLAN.md). Include `LogModelContextProtocol` from the UE Output Log and `grok mcp doctor unreal-mcp` output.
 
 ---
 
