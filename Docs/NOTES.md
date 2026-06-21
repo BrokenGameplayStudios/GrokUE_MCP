@@ -282,11 +282,13 @@ Test actor: `PlayerStart` — refPath `/Temp/Untitled_1.Untitled_1:PersistentLev
 
 | # | Tool | Result |
 |---|------|--------|
-| AE1 | `create` `asset_type: /Script/Engine.PrimaryDataAsset` | **Pass in-memory** — `save_assets` → `false` (abstract type) |
-| AE2 | `create` `asset_type: /Script/EnhancedInput.InputAction` → `DA_GrokPhase7Test_InputAction` | **Pass** — + `save_assets` |
+| AE1 | `create` `asset_type: /Script/Engine.PrimaryDataAsset` → `DA_GrokPhase7Test` | **Pass in-memory** — `save_assets` → `false`; user sees asset in Content Browser (unsaved) |
+| AE1b | `create` `asset_type: /Script/Engine.DataAsset` → `DA_GrokPhase7Test2` | Same — CB visible; `save_assets` → `false` |
+| AE2 | `create` `asset_type: /Script/EnhancedInput.InputAction` → `DA_GrokPhase7Test_InputAction` | **Pass** — `save_assets` succeeded on first call |
 | AE3 | `get_asset_class` | **Pass** — `InputAction` |
+| AE4 | `save_assets` retry on `DA_GrokPhase7Test` + `DA_GrokPhase7Test2` | **Still false** — not a registration-delay issue |
 
-**Hitch:** `asset_type` must be a concrete DataAsset subclass. Abstract bases (`DataAsset`, `PrimaryDataAsset`) return refPath but do not persist.
+**Hitch:** Abstract `asset_type` values create unsaved in-editor assets (visible in Content Browser) but `save_assets` returns `false` even when retried after a delay. Concrete subclasses (e.g. `InputAction`) save immediately.
 
 ### Batch AF — DataTableTools write (verified 2026-06-20)
 
@@ -684,7 +686,7 @@ Editor restarts invalidate MCP session IDs. If Grok reports `Unknown session id`
 | Date | Issue | Resolution |
 |------|-------|------------|
 | 2026-06-20 | `/Game/Developers/` assets invisible in Content Browser | Enable **Show Developers Content**, or create under `/Game/<Folder>/` (e.g. `MCPTest`); see Batch V |
-| 2026-06-20 | `DataAssetTools.create` with abstract `asset_type` (`DataAsset`, `PrimaryDataAsset`) | `save_assets` returns `false`; use a concrete subclass (e.g. `/Script/EnhancedInput.InputAction`); see Batch AE |
+| 2026-06-20 | `DataAssetTools.create` with abstract `asset_type` (`DataAsset`, `PrimaryDataAsset`) | Creates unsaved CB-visible assets; `save_assets` → `false` even on retry — not timing; use concrete subclass; see Batch AE |
 | 2026-06-20 | `BlueprintTools.create` — returns refPath but no `.uasset` until `save_assets` | Call `AssetTools.save_assets` immediately after create; see Batch V |
 | 2026-06-20 | `CaptureViewport` — `{}` rejected; optional `captureTransform` and `annotations` lack binding defaults | Pass both explicitly from `GetCameraTransform` + minimal annotations; see Batch N |
 | 2026-06-20 | `GrokProjectTools` — dataclass return type broke `@unreal.uclass()` generation | Use `@unreal.ustruct()`; restart editor after fix |

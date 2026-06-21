@@ -224,11 +224,13 @@ Source: `Plugins/GrokUEMCPTools/Content/Python/grok_ue_mcp/toolsets/project_tool
 
 | ID | Tool | Result |
 |----|------|--------|
-| AE1 | `create` `asset_type: PrimaryDataAsset` | Pass in-memory — **`save_assets` → false** (abstract type) |
-| AE2 | `create` `asset_type: /Script/EnhancedInput.InputAction` → `DA_GrokPhase7Test_InputAction` | Pass — + `save_assets` |
+| AE1 | `create` `asset_type: PrimaryDataAsset` → `DA_GrokPhase7Test` | Pass in-memory — **`save_assets` → false**; visible in Content Browser (unsaved) |
+| AE1b | `create` `asset_type: DataAsset` → `DA_GrokPhase7Test2` | Same — in-memory + CB visible; `save_assets` → false |
+| AE2 | `create` `asset_type: /Script/EnhancedInput.InputAction` → `DA_GrokPhase7Test_InputAction` | Pass — + `save_assets` on first try |
 | AE3 | `get_asset_class` | Pass — `InputAction` |
+| AE4 | `save_assets` retry on `DA_GrokPhase7Test` + `DA_GrokPhase7Test2` (after user delay) | **Still false** — rules out registration-timing hypothesis |
 
-**Hitch:** `asset_type` must be a **concrete** DataAsset subclass; abstract bases (`DataAsset`, `PrimaryDataAsset`) return refPath but won't persist.
+**Hitch:** Abstract `asset_type` (`DataAsset`, `PrimaryDataAsset`) creates **unsaved** assets that appear in Content Browser but `save_assets` never succeeds (retried). Use a **concrete** subclass (e.g. `InputAction`).
 
 **Test asset:** `/Game/MCPTest/DA_GrokPhase7Test_InputAction`
 

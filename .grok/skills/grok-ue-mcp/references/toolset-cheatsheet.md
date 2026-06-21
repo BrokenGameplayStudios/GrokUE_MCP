@@ -153,7 +153,7 @@ Write-only: `add_cube`, `add_sphere`, `add_cylinder`, `add_cone` — adds mesh c
 | Tool | Notes |
 |------|-------|
 | `create` | `folder_path`, `asset_name`, `asset_type.refPath` — then **`save_assets`** |
-| | `asset_type` must be a **concrete** subclass (e.g. `/Script/EnhancedInput.InputAction`); abstract `PrimaryDataAsset` won't save |
+| | Abstract types (`DataAsset`, `PrimaryDataAsset`) appear in CB but stay unsaved — `save_assets` → `false` even on retry; use concrete subclass (e.g. `InputAction`) |
 
 ## Data table (`editor_toolset.toolsets.data_table.DataTableTools`)
 
