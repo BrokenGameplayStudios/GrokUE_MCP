@@ -108,6 +108,7 @@ Template: `Docs/PLAN.md` → Hitch Reporting Template. Log results in `Docs/NOTE
 
 | File | Contents |
 |------|----------|
+| `Docs/CAPABILITIES.md` | What Grok + MCP can do (human summary) |
 | `Docs/PLAN.md` | Full integration plan, phases, troubleshooting |
 | `Docs/NOTES.md` | Verified test results, screenshots, session workflow |
 | `Docs/images/` | Phase screenshots for regression reference |

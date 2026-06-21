@@ -6,6 +6,8 @@ This repo is not a game prototype. It exists to **prove, document, and stabilize
 
 **Maintained by:** [Broken Gameplay Studios](https://github.com/BrokenGameplayStudios)
 
+**→ [What Grok + MCP can do](Docs/CAPABILITIES.md)** — scannable summary of verified capabilities (start here if you don't want to read all the phase notes).
+
 ---
 
 ## Integration status (2026-06-21)
@@ -103,6 +105,7 @@ GrokUE_MCP/
 ├── ImportedAssets/          # Downloaded meshes (gitignored); scripts/ tracked
 │   └── scripts/scale_obj_to_ue_cm.py   # Kenney OBJ → UE-sized import
 ├── Docs/
+│   ├── CAPABILITIES.md      # What Grok + MCP can do (start here)
 │   ├── PLAN.md              # Full integration plan (Phases 0–8)
 │   ├── NOTES.md             # Verified results, handoff, screenshots index
 │   ├── PHASE7_PROGRESS.md   # Phase 7 archive
@@ -124,6 +127,7 @@ GrokUE_MCP/
 
 | Document | Purpose |
 |----------|---------|
+| **[Docs/CAPABILITIES.md](Docs/CAPABILITIES.md)** | **What works** — human summary of tested Grok + MCP abilities |
 | [Docs/PHASE8_PROGRESS.md](Docs/PHASE8_PROGRESS.md) | **Resume here** — latest checkpoint, Kenney import recipe |
 | [Docs/NOTES.md](Docs/NOTES.md) | Full test history, handoff, hitch screenshots |
 | [Docs/PLAN.md](Docs/PLAN.md) | Original phased plan, troubleshooting, hitch template |
@@ -137,6 +141,7 @@ GrokUE_MCP/
 
 | Date | Update |
 |------|--------|
+| **2026-06-21** | **[Docs/CAPABILITIES.md](Docs/CAPABILITIES.md)** — scannable “what Grok + MCP can do” summary linked from README. |
 | **2026-06-21** | **Phase 8 complete** — H2 Kenney web import (`scale_obj_to_ue_cm.py`, `--kenney-ue`); final screenshot `Docs/images/phase8-h2-kenney-imports-final.jpg`. |
 | **2026-06-20** | **Phase 8 H1** — material + DataTable + Blueprint `write_graph_dsl` + PIE prints. |
 | **2026-06-20** | **Phase 7 complete** — all 19 Epic toolsets cataloged/probed; `L_Grok` + `/Game/MCPTest/`. |

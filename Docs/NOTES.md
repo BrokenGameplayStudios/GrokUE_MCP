@@ -59,6 +59,7 @@ To add more project tools, edit `project_tools.py`, restart the editor, then `Mo
 
 | Goal | Start here |
 |------|------------|
+| **What can Grok/MCP do?** | **`Docs/CAPABILITIES.md`** — scannable summary |
 | Daily Grok + UE work | `AGENTS.md` + `/grok-ue-mcp` |
 | Add project MCP tools | `Plugins/GrokUEMCPTools/Content/Python/grok_ue_mcp/toolsets/project_tools.py` → editor restart → `ModelContextProtocol.RefreshTools` |
 | Custom tool authoring rules | `@unreal.ustruct()` for struct returns — **not** `@dataclass` (see Phase 5 hitch below) |
