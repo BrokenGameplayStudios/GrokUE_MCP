@@ -12,6 +12,7 @@ This repo is not a game prototype. It exists to document, test, and stabilize a 
 
 | Date | Update |
 |------|--------|
+| **2026-06-20** | Phase 2–3 started: Unreal MCP connected; Grok `/mcps` shows `unreal-mcp [ready]`. Batch A meta-tool tests pass. `EditorToolset` enabled in `.uproject` for upcoming scene tests. See `Docs/NOTES.md`. |
 | **2026-06-20** | Initial scaffold committed: blank UE 5.8 project (`GrokUE_MCP.uproject`), standard `Config/`, integration plan in `Docs/PLAN.md`, and project-scoped Grok MCP config (`.grok/config.toml` → `http://127.0.0.1:8000/mcp`). MCP plugin not yet enabled in editor. |
 | **2026-06-20** | Repository created. Blank UE project built locally at `F:\UEDEV\GrokUE_MCP`, copied into `F:\git\GrokUE_MCP` for version control. |
 
@@ -23,22 +24,22 @@ This repo is not a game prototype. It exists to document, test, and stabilize a 
 
 | Area | Status |
 |------|--------|
-| **Integration phase** | Phase 0 — scaffolded, MCP not yet connected |
-| **Unreal project** | Blank Blueprint template, UE 5.8, opened once at creation |
-| **MCP server** | Not configured — Epic **Unreal MCP** plugin not yet enabled |
-| **Grok config** | Project-scoped `.grok/config.toml` templated for `unreal-mcp` HTTP endpoint |
-| **Next step** | Open project in UE 5.8 → enable Unreal MCP → verify Grok connection (see `Docs/PLAN.md`) |
+| **Integration phase** | Phase 3 — first connection tests (Batch A pass; Batch B/C pending editor restart) |
+| **Unreal project** | Blank Blueprint template, UE 5.8 |
+| **MCP server** | Epic **Unreal MCP** enabled; auto-start on `http://127.0.0.1:8000/mcp` |
+| **Grok config** | Project-scoped `.grok/config.toml`; `unreal-mcp` reports **ready** in `/mcps` |
+| **Next step** | Restart UE editor (EditorToolset) → run Batch B/C tests in `Docs/NOTES.md` |
 
 ### What works today
 
-- Project opens as a standard blank UE 5.8 Blueprint project.
-- Repo is ready for commit/push with sensible UE `.gitignore` rules.
-- Integration roadmap and hitch-report template are written.
+- Grok connects to Unreal MCP over HTTP; meta-tools (`list_toolsets`, `describe_toolset`, `call_tool`) respond.
+- Read-only AgentSkill queries work (empty project returns no skills).
+- Integration notes and Phase 3 test batches documented in `Docs/NOTES.md`.
 
 ### What does not work yet
 
-- Grok cannot control the editor — the MCP bridge has not been brought up.
-- No custom toolsets, plugins, or gameplay content.
+- Scene/actor/spawn prompts from the plan — **EditorToolset** was just enabled; editor restart required.
+- No custom project toolsets or gameplay content.
 
 ---
 
@@ -66,7 +67,9 @@ GrokUE_MCP/
 ├── Config/               # Engine config (DefaultEngine, Input, etc.)
 ├── Content/              # Blank — no gameplay assets yet
 ├── Docs/
-│   └── PLAN.md           # Full integration plan, phases, troubleshooting
+│   ├── PLAN.md           # Full integration plan, phases, troubleshooting
+│   ├── NOTES.md          # Phase results, test batches, open questions
+│   └── images/           # Screenshots for documentation
 ├── .grok/
 │   └── config.toml       # Project-scoped Grok MCP server config
 └── README.md             # This file
@@ -96,6 +99,7 @@ Epic's built-in **Unreal MCP** plugin is the primary integration path. See [Epic
 | Document | Purpose |
 |----------|---------|
 | [Docs/PLAN.md](Docs/PLAN.md) | Step-by-step integration phases, test prompts, hitch-report template |
+| [Docs/NOTES.md](Docs/NOTES.md) | Verified results, Phase 3 test batches, findings |
 | [README.md](README.md) | Project overview, current state, changelog (this file) |
 
 ---

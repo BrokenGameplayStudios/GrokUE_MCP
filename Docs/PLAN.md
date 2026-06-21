@@ -1,6 +1,6 @@
 # GrokUE_MCP — Integration Plan
 
-**Status:** Phase 0 — Project scaffolded, integration not yet started  
+**Status:** Phase 3 — First connection tests (Batch A pass; see `Docs/NOTES.md`)  
 **Last updated:** 2026-06-20  
 **Directed by:** Grok (Broken Gameplay Studios workflow)
 

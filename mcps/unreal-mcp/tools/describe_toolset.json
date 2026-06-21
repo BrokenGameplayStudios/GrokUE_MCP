@@ -1,0 +1,16 @@
+{
+  "name": "describe_toolset",
+  "description": "Get detailed information about a toolset including all tool names, descriptions, and input schemas.",
+  "inputSchema": {
+    "type": "object",
+    "properties": {
+      "toolset_name": {
+        "type": "string",
+        "description": "Name of the toolset to describe. Use list_toolsets to see available names."
+      }
+    },
+    "required": [
+      "toolset_name"
+    ]
+  }
+}
