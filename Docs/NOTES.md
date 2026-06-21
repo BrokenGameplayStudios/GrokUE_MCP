@@ -1,7 +1,7 @@
 # GrokUE_MCP — Integration Notes
 
 **Last updated:** 2026-06-20  
-**Current phase:** Integration **complete** (Phases 0–5 pass). Ready for daily use and feature work.
+**Current phase:** Integration **complete** (Phases 0–6 pass). Ready for daily use and feature work.
 
 This file records what we verified, what failed, and answers to open questions from [PLAN.md](PLAN.md). Update it as each phase completes.
 
@@ -32,6 +32,7 @@ This file records what we verified, what failed, and answers to open questions f
 | 3 | Batches A/B/C — meta-tools, scene read, spawn/focus/remove cube ([screenshots](images/)) |
 | 4 | Daily startup/shutdown workflow adopted |
 | 5 | `AGENTS.md`, `/grok-ue-mcp` skill, custom `GrokUEMCPTools` plugin (**20 toolsets**) |
+| 6 | Cursor IDE re-confirmed Phase 3 results (no new capability; see Phase 6) |
 
 ### 3. Where to work next
 
@@ -42,6 +43,7 @@ This file records what we verified, what failed, and answers to open questions f
 | Custom tool authoring rules | `@unreal.ustruct()` for struct returns — **not** `@dataclass` (see Phase 5 hitch below) |
 | Gameplay / content | `Content/` (blank today) |
 | CI / headless MCP | `Docs/PLAN.md` Phase 5 — `-ModelContextProtocolStartServer` (not started) |
+| **Phase 7 — expand coverage** | Test toolsets not yet verified (logs, viewport capture, assets, blueprints) — see Phase 7 below |
 
 ### 4. Key repo paths
 
@@ -73,6 +75,66 @@ F:\git\GrokUE_MCP\
 | 3 — First connection tests | **Pass** | 2026-06-20 | Batches A/B/C verified — spawn, focus, remove `GrokTestCube` end-to-end |
 | 4 — Repeatable workflow | **Pass** | 2026-06-20 | Daily startup/shutdown checklist adopted |
 | 5 — Grow capabilities | **Pass** | 2026-06-20 | 20 toolsets; `health_check` live-verified from fresh Grok session |
+| 6 — Multi-client regression | **Pass** | 2026-06-20 | Cursor IDE agent: read + write tests; `grok mcp doctor` healthy |
+
+---
+
+## Phase 6 — Cursor IDE Re-confirmation
+
+**Goal:** Confirm Cursor IDE agents can drive the same MCP bridge as Grok TUI. This re-ran Phase 3 Batches B/C plus `get_session_info` — **no new tools or workflows** beyond what Phases 2–5 already verified.
+
+**Client:** Cursor Composer with `unreal-mcp` at `http://127.0.0.1:8000/mcp`.  
+**Outcome:** All pass. User confirmed cube spawn/focus/remove in viewport. Existing Phase 3 screenshots remain the visual reference.
+
+### Session startup (Cursor)
+
+| Step | Action |
+|------|--------|
+| 1 | Open `GrokUE_MCP.uproject` — confirm Output Log → `Starting MCP server on port 8000` |
+| 2 | Open this repo in Cursor — ensure `unreal-mcp` MCP server is configured |
+| 3 | After editor restart → restart Cursor Grok session (session IDs invalidate) |
+| 4 | Health check → `GrokProjectTools.health_check` |
+
+### Batch D — Read-only (verified 2026-06-20)
+
+| # | Tool | Arguments | Pass criteria | Result |
+|---|------|-----------|---------------|--------|
+| D1 | `list_toolsets` | `{}` | 20 toolsets including `GrokProjectTools` | **Pass** |
+| D2 | `GrokProjectTools.health_check` | `{}` | `GrokUE_MCP: custom toolset healthy` | **Pass** |
+| D3 | `GrokProjectTools.get_session_info` | `{}` | Project name, dirs, level path | **Pass** — `GrokUE_MCP`, `F:/Git/GrokUE_MCP/`, `/Temp/Untitled_1` |
+| D4 | `describe_toolset` | `GrokProjectTools` | 2 tools with JSON schemas | **Pass** — `health_check`, `get_session_info` |
+| D5 | `SceneTools.get_current_level` | `{}` | Level asset path | **Pass** — `/Temp/Untitled_1` |
+| D6 | `SceneTools.find_actors` | `name/tag/collision_channels` empty filter | Actor list (default level) | **Pass** — 131 actors; `PlayerStart`, `DirectionalLight`, `Landscape`, etc. |
+| D7 | `EditorAppToolset.GetSelectedActors` | `{}` | Array (may be empty) | **Pass** — `[]` |
+
+### Batch E — Light write regression (verified 2026-06-20)
+
+Re-ran Phase 3 Batch C end-to-end from Cursor. Verify in UE viewport/Outliner after C1.
+
+| # | Tool | Arguments | Pass criteria | Result |
+|---|------|-----------|---------------|--------|
+| E1 | `SceneTools.add_to_scene_from_asset` | `/Engine/BasicShapes/Cube`, `GrokTestCube`, origin | Returns `refPath`; cube in Outliner | **Pass** — `StaticMeshActor_UAID_D8BBC1098290B8E602_1152976759` |
+| E2 | `EditorAppToolset.FocusOnActors` | actor `refPath` from E1 | Camera frames cube | **Pass** — `null` return (void tool) |
+| E3 | `SceneTools.remove_from_scene` | actor `refPath` from E1 | `true`; actor gone | **Pass** — `find_actors` name filter `GrokTestCube` → `[]` |
+
+### CLI health (verified 2026-06-20)
+
+```powershell
+cd F:\git\GrokUE_MCP
+grok mcp doctor unreal-mcp
+```
+
+**Result:** `Found 1 healthy, 0 failing` — handshake OK, 3 meta-tools discovered.
+
+### Takeaway for repo readers
+
+| Client | How to connect | Verified |
+|--------|----------------|----------|
+| Grok TUI | `grok` from repo root → `/mcps` → `unreal-mcp` | Phases 2–5 |
+| Cursor IDE | MCP server config → `unreal-mcp` at `http://127.0.0.1:8000/mcp` | Phase 6 |
+| MCP Inspector | `npx @modelcontextprotocol/inspector` | Phase 1 (optional) |
+
+Both Grok TUI and Cursor use the same 3 meta-tools (`list_toolsets`, `describe_toolset`, `call_tool`) and the same 20 toolsets. **One MCP call at a time** applies to all clients.
 
 ---
 
@@ -351,6 +413,7 @@ Use the template in [PLAN.md](PLAN.md) for additional failures.
 
 | Date | Change |
 |------|--------|
+| 2026-06-20 | **Phase 6 pass** — Cursor IDE regression (Batches D/E); `get_session_info` verified; multi-client table |
 | 2026-06-20 | Handoff section + `health_check` Grok session screenshot; integration marked complete |
 | 2026-06-20 | Phase 5 custom toolset **pass** — screenshot + log confirm 20 toolsets after ustruct fix |
 | 2026-06-20 | Hitch fix — `GrokSessionInfo` must be `@unreal.ustruct()`, not `@dataclass`; documented in Phase 5 |

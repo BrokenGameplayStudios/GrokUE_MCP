@@ -12,6 +12,7 @@ This repo is not a game prototype. It exists to document, test, and stabilize a 
 
 | Date | Update |
 |------|--------|
+| **2026-06-20** | **Phase 6 pass** — Cursor IDE re-confirmed Phase 3 results; multi-client note in `Docs/NOTES.md`. |
 | **2026-06-20** | **Integration complete** — handoff in `Docs/NOTES.md`; `health_check` live-verified from fresh Grok session. |
 | **2026-06-20** | **Phase 5 pass** — custom `GrokProjectTools` registered (20 toolsets); ustruct hitch documented. |
 | **2026-06-20** | **Phase 5 started** — `AGENTS.md`, `/grok-ue-mcp` skill, `GrokUEMCPTools` custom MCP plugin. |
@@ -30,7 +31,7 @@ This repo is not a game prototype. It exists to document, test, and stabilize a 
 
 | Area | Status |
 |------|--------|
-| **Integration phase** | Phase 5 **complete** (CI/headless optional future work) |
+| **Integration phase** | Phase 6 **complete** (CI/headless optional future work) |
 | **Unreal project** | Blank Blueprint template, UE 5.8 |
 | **MCP server** | Epic **Unreal MCP** enabled; auto-start on `http://127.0.0.1:8000/mcp` |
 | **Grok config** | Project-scoped `.grok/config.toml`; `unreal-mcp` reports **ready** in `/mcps` |
@@ -42,6 +43,7 @@ This repo is not a game prototype. It exists to document, test, and stabilize a 
 - Scene inspection (`find_actors`, `get_current_level`) and light writes (spawn, focus viewport, remove actor) verified.
 - Repeatable daily session workflow (startup, health check, shutdown) in `Docs/NOTES.md` § Phase 4.
 - `AGENTS.md` agent conventions, `/grok-ue-mcp` project skill, custom `GrokProjectTools` MCP toolset (20 toolsets total).
+- **Cursor IDE** agents can drive the same MCP bridge as Grok TUI (Phase 6 re-confirmed).
 - Read-only AgentSkill queries work (empty project returns no skills).
 
 ### What does not work yet
