@@ -1,7 +1,7 @@
 # GrokUE_MCP — Integration Notes
 
 **Last updated:** 2026-06-20  
-**Current phase:** Phase 8 in progress — integrated content pipeline. **Resume:** `Docs/PHASE8_PROGRESS.md` → `Docs/PHASE8_PLAN.md`
+**Current phase:** Phase 8 Batch H1 **complete**. **Resume:** `Docs/PHASE8_PROGRESS.md` (optional: save `L_Grok`, next integration target TBD)
 
 This file records what we verified, what failed, and answers to open questions from [PLAN.md](PLAN.md). Update it as each phase completes.
 
@@ -64,7 +64,7 @@ To add more project tools, edit `project_tools.py`, restart the editor, then `Mo
 | Custom tool authoring rules | `@unreal.ustruct()` for struct returns — **not** `@dataclass` (see Phase 5 hitch below) |
 | Gameplay / content | `Content/` (blank today) |
 | CI / headless MCP | `Docs/PLAN.md` Phase 5 — `-ModelContextProtocolStartServer` (not started) |
-| **Phase 8 — integrated logic** | **`Docs/PHASE8_PLAN.md`** — material + MI + BP + DataTable pipeline |
+| **Phase 8 — integrated logic** | **`Docs/PHASE8_PROGRESS.md`** — H1 complete; screenshot in `Docs/images/` |
 | Phase 7 results (archive) | **`Docs/PHASE7_PROGRESS.md`** — do not re-run completed batches |
 
 ### 4. Key repo paths
@@ -99,15 +99,15 @@ F:\git\GrokUE_MCP\
 | 5 — Grow capabilities | **Pass** | 2026-06-20 | 20 toolsets; `health_check` live-verified from fresh Grok session |
 | 6 — Multi-client regression | **Pass** | 2026-06-20 | Cursor IDE agent: read + write tests; `grok mcp doctor` healthy |
 | 7 — Expand toolset coverage | **Pass** | 2026-06-20 | All 19 Epic toolsets cataloged/probed (Batches F–AG); `L_Grok` + `/Game/MCPTest/`; see Phase 7 summary |
-| 8 — Integrated content pipeline | **In progress** | 2026-06-20 | Batch H1 pass — material/MF/MI/DT/BP/spawn; PIE verify pending; `PHASE8_PROGRESS.md` |
+| 8 — Integrated content pipeline | **H1 Pass** | 2026-06-20 | Full MCP chain + PIE prints; screenshot `images/phase8-h1-pie-datatable-prints.jpg` |
 
 ---
 
-## Phase 8 — Integrated Content Pipeline (In Progress)
+## Phase 8 — Integrated Content Pipeline (Batch H1 Complete)
 
 **Goal:** Chain MCP tools to build content with logic — material stack + DataTable + Blueprint `write_graph_dsl` + spawned actor. See `Docs/PHASE8_PLAN.md`.
 
-### Batch H1 — Full vertical slice (verified 2026-06-20, PIE pending)
+### Batch H1 — Full vertical slice (verified 2026-06-20)
 
 | # | Step | Result |
 |---|------|--------|
@@ -119,10 +119,15 @@ F:\git\GrokUE_MCP\
 | H1f | `BlueprintTools.create` `BP_GrokPhase8` + `GrokStringTable` var + CDO default DT | **Pass** — compile required before `set_properties` on CDO |
 | H1g | `write_graph_dsl` BeginPlay: `GetDataTableColumnasString` → `ForEachLoop` → `PrintString` | **Pass** — property `"mirroredName"` |
 | H1h | Spawn `GrokPhase8Actor` + `PrimitiveTools.add_cube` + MI on `GrokMesh` | **Pass** — at (0,200,100) in `L_Grok` |
+| H1i | User PIE + viewport confirm | **Pass** — orange cube + Output Log prints all 3 DT strings |
+
+![Batch H1 — PIE prints DataTable strings; GrokPhase8Actor with M_GrokPhase8_Inst](images/phase8-h1-pie-datatable-prints.jpg)
+
+*User-confirmed 2026-06-20: PIE Output Log shows `Phase 8 hello`, `DataTable row two`, `MCP integration test`; viewport shows tinted cube on `L_Grok`.*
 
 **Note:** Struct field `.mirroredName` not supported in DSL expressions; used `DataTable|GetDataTableColumnasString` instead.
 
-**Spawned actor refPath:** `/Game/Maps/L_Grok.L_Grok:PersistentLevel.BP_GrokPhase8_C_UAID_D8BBC1098290BFE602_1385681993` (session-specific; re-spawn after map reload).
+**New toolsets probed in H1:** `MaterialTools` expression graph, `MaterialInstanceTools.set_scalar_parameter`, `PrimitiveTools.add_cube`, `BlueprintTools.write_graph_dsl`.
 
 ---
 
@@ -741,6 +746,7 @@ Use the template in [PLAN.md](PLAN.md) for additional failures.
 
 | Date | Change |
 |------|--------|
+| 2026-06-20 | **Phase 8 Batch H1 complete** — integrated pipeline + PIE screenshot `phase8-h1-pie-datatable-prints.jpg` |
 | 2026-06-20 | **Phase 7 complete** — all 19 Epic toolsets cataloged/probed; resume `PHASE8_PLAN.md` |
 | 2026-06-20 | Phase 7 Batch AG — Blueprint Primary Data Asset subclass + saveable instance |
 | 2026-06-20 | `Docs/PHASE8_PLAN.md` — integrated material/BP/DataTable pipeline (planned) |

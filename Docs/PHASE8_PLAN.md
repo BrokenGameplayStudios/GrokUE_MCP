@@ -1,6 +1,6 @@
 # Phase 8 — Integrated content creation (planned)
 
-**Status:** In progress — checkpoint `Docs/PHASE8_PROGRESS.md`.
+**Status:** Batch H1 **complete** (2026-06-20) — checkpoint `Docs/PHASE8_PROGRESS.md`.
 
 **Goal:** Prove MCP can chain asset types with **logic** — each step is basic alone; the full pipeline is the stress test.
 
@@ -28,12 +28,12 @@ Build a small vertical slice in `/Game/MCPTest/` on level `/Game/Maps/L_Grok`:
 | ObjectTools set/get properties | AG |
 | StringTable / DataTable string data | AD, AF |
 
-## Open probes (remaining)
+## Optional follow-ups
 
-| Item | Toolset | Status |
-|------|---------|--------|
-| PIE / runtime verify | `EditorAppToolset` | Pending — user Output Log or `StartPIE` |
-| Persist spawn in git | save `L_Grok` | Pending — user save map |
+| Item | Status |
+|------|--------|
+| Save `L_Grok` with `GrokPhase8Actor` | Optional — persist spawn in git |
+| `StartPIE` via MCP | Skipped — user PIE confirmed prints |
 
 ## Suggested execution order (one MCP call at a time)
 
@@ -45,11 +45,11 @@ Material → Material Function (if separate) → wire parent material
 → compile_blueprint → save → spawn in L_Grok → user confirms viewport + Output Log
 ```
 
-## Success criteria
+## Success criteria (H1 — met 2026-06-20)
 
-- All assets on disk under `/Game/MCPTest/`
-- Spawned actor visible in `L_Grok` with custom material
-- Output Log shows printed strings from DataTable rows when PIE runs (or graph compile pass if PIE skipped)
+- [x] All assets on disk under `/Game/MCPTest/`
+- [x] Spawned actor visible in `L_Grok` with custom material (`M_GrokPhase8_Inst`)
+- [x] Output Log prints all 3 DataTable `mirroredName` strings on PIE — see `Docs/images/phase8-h1-pie-datatable-prints.jpg`
 
 ## Doc hygiene
 
