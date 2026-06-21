@@ -14,7 +14,7 @@ Human-readable summary of **what we tested** in this repo (Phases 0–8, June 20
 |----------|--------|
 | Is this every MCP tool? | **No.** We document **20 toolsets** (19 Epic + `GrokProjectTools`) as of our UE 5.8 test window. Patches, plugins, or project changes can add or rename tools. |
 | Did we run every tool in each toolset? | **No.** Phase 7 mixed **read probes**, **write probes**, and **catalog-only** passes (tool names from `describe_toolset`, not executed). A 📋 or ❓ row here does **not** mean “the only things left untested.” |
-| What is authoritative? | **`list_toolsets`** — toolset names · **`describe_toolset`** — every tool name + JSON schema for that toolset · **[toolset-cheatsheet.md](../.grok/skills/grok-ue-mcp/references/toolset-cheatsheet.md)** — our notes on tools we touched most |
+| What is authoritative? | **`list_toolsets`** — toolset names · **`describe_toolset`** — every tool name + JSON schema for that toolset · **[TOOL_CATALOG.md](TOOL_CATALOG.md)** — full per-tool list (live snapshot) · **[toolset-cheatsheet.md](../.grok/skills/grok-ue-mcp/references/toolset-cheatsheet.md)** — argument notes on tools we touched most |
 | What does “not tested” below mean? | **Examples** of gaps we know about — **not** a full inventory of everything we skipped. Many tools in probed toolsets were never called. |
 
 ---
@@ -152,6 +152,7 @@ These are **examples** of things we did not verify. Many other tools in the tabl
 
 | Doc | Use when |
 |-----|----------|
+| [TOOL_CATALOG.md](TOOL_CATALOG.md) | Full tool list per toolset (for picking future tests) |
 | [PHASE8_PROGRESS.md](PHASE8_PROGRESS.md) | Latest checkpoint + Kenney recipe |
 | [NOTES.md](NOTES.md) | Full batch results, handoff, all screenshots |
 | [PHASE7_PROGRESS.md](PHASE7_PROGRESS.md) | Per-toolset probe archive |
