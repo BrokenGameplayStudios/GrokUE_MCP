@@ -230,7 +230,7 @@ Source: `Plugins/GrokUEMCPTools/Content/Python/grok_ue_mcp/toolsets/project_tool
 | AE3 | `get_asset_class` | Pass — `InputAction` |
 | AE4 | `save_assets` retry on `DA_GrokPhase7Test` + `DA_GrokPhase7Test2` (after user delay) | **Still false** — rules out registration-timing hypothesis |
 
-**Hitch:** Abstract `asset_type` (`DataAsset`, `PrimaryDataAsset`) creates **unsaved** assets that appear in Content Browser but `save_assets` never succeeds (retried). Use a **concrete** subclass (e.g. `InputAction`).
+**Hitch (expected UE behavior, not MCP false negative):** `DataAsset` and `PrimaryDataAsset` are **abstract framework bases** — meant to be **subclassed** (C++ or Blueprint) with your own `UPROPERTY` data, then instantiated. MCP `create` can spawn a transient in-memory object (CB-visible, unsaved) but `save_assets` returns `false` because there is no valid concrete asset type to persist. Standard workflow: define e.g. `UMyItemData : UPrimaryDataAsset` in C++, or a Blueprint child of Primary Data Asset, then `create` with that class refPath. `InputAction` works because it is already a concrete plugin type with saveable state.
 
 **Test asset:** `/Game/MCPTest/DA_GrokPhase7Test_InputAction`
 

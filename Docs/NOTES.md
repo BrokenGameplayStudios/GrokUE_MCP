@@ -288,7 +288,7 @@ Test actor: `PlayerStart` — refPath `/Temp/Untitled_1.Untitled_1:PersistentLev
 | AE3 | `get_asset_class` | **Pass** — `InputAction` |
 | AE4 | `save_assets` retry on `DA_GrokPhase7Test` + `DA_GrokPhase7Test2` | **Still false** — not a registration-delay issue |
 
-**Hitch:** Abstract `asset_type` values create unsaved in-editor assets (visible in Content Browser) but `save_assets` returns `false` even when retried after a delay. Concrete subclasses (e.g. `InputAction`) save immediately.
+**Hitch (expected UE behavior):** `DataAsset` / `PrimaryDataAsset` are abstract bases for the Asset Manager pattern — you subclass them in **C++** (or create a **Blueprint** child of Primary Data Asset) and add your own properties, then create instances of *that* type. MCP `create` against the raw base class yields a transient CB-visible object with nothing valid to persist; `save_assets` → `false` even on retry. This is standard for the class, not an MCP timing bug. `InputAction` saves because it is a concrete, plugin-defined `UDataAsset` subclass.
 
 ### Batch AF — DataTableTools write (verified 2026-06-20)
 
@@ -686,7 +686,7 @@ Editor restarts invalidate MCP session IDs. If Grok reports `Unknown session id`
 | Date | Issue | Resolution |
 |------|-------|------------|
 | 2026-06-20 | `/Game/Developers/` assets invisible in Content Browser | Enable **Show Developers Content**, or create under `/Game/<Folder>/` (e.g. `MCPTest`); see Batch V |
-| 2026-06-20 | `DataAssetTools.create` with abstract `asset_type` (`DataAsset`, `PrimaryDataAsset`) | Creates unsaved CB-visible assets; `save_assets` → `false` even on retry — not timing; use concrete subclass; see Batch AE |
+| 2026-06-20 | `DataAssetTools.create` with abstract `asset_type` (`DataAsset`, `PrimaryDataAsset`) | Expected UE behavior — bases are abstract; subclass in C++/Blueprint first, then `create` concrete type; see Batch AE |
 | 2026-06-20 | `BlueprintTools.create` — returns refPath but no `.uasset` until `save_assets` | Call `AssetTools.save_assets` immediately after create; see Batch V |
 | 2026-06-20 | `CaptureViewport` — `{}` rejected; optional `captureTransform` and `annotations` lack binding defaults | Pass both explicitly from `GetCameraTransform` + minimal annotations; see Batch N |
 | 2026-06-20 | `GrokProjectTools` — dataclass return type broke `@unreal.uclass()` generation | Use `@unreal.ustruct()`; restart editor after fix |
