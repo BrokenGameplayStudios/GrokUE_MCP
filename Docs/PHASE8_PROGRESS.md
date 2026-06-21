@@ -2,7 +2,7 @@
 
 **Resume here.** Full plan: `Docs/PHASE8_PLAN.md`. Results: `Docs/NOTES.md` § Phase 8.
 
-**Status:** Batch H1 **complete** — user confirmed viewport + PIE prints (2026-06-20)
+**Status:** Batches **H1 + H2 complete** — user confirmed (2026-06-21)  
 **Level:** `/Game/Maps/L_Grok`  
 **Asset folder:** `/Game/MCPTest/`
 
@@ -17,18 +17,43 @@
 | 5 | DataTable (string rows) | `DT_GrokPhase8_Strings` (3 rows) | **done** |
 | 6 | Actor Blueprint + mesh + MI | `BP_GrokPhase8` + `GrokMesh` | **done** |
 | 7 | Blueprint logic: ForEach → Print String | `write_graph_dsl` EventGraph | **done** |
-| 8 | Spawn in L_Grok + PIE verify | `GrokPhase8Actor` | **done** — user confirmed |
+| 8 | Spawn in L_Grok + PIE verify | `GrokPhase8Actor` | **done** |
+| 9 | Web mesh import pipeline | `SM_GrokKenneyBench_90cm_UE`, `SM_GrokKenneyBear_60cm_UE` | **done** — H2 |
 
 ## Queue
 
-**Empty** — Batch H1 complete. Optional: save `L_Grok` to persist spawn in git.
+**Empty** — Phase 8 integration targets met. **Next (Phase 2):** real-world DEM → heightmap → landscape (no Landscape MCP toolset yet).
+
+## Kenney import recipe (H2 final)
+
+```powershell
+python ImportedAssets/scripts/scale_obj_to_ue_cm.py `
+  "<kenney>.obj" "ImportedAssets/scaled/<name>_ue.obj" `
+  --target-max-cm <height_cm> --kenney-ue
+```
+
+Then `StaticMeshTools.import_file` → spawn at **scale 1**, **rotation 0**, `M_GrokPhase8_Inst` on material slot.
+
+| Flag / step | Purpose |
+|-------------|---------|
+| `--kenney-ue` | Y-up → Z-up, +X forward, +180° Z, face-winding fix |
+| `--target-max-cm` | Bounds-sized import (uu = cm at actor scale 1) |
+| `import_file` | **FBX/OBJ only** — glTF/GLB rejected by `FbxFactory` |
+
+## Batch H2 — final viewport (user confirmed 2026-06-21)
+
+![Kenney bench + bear — size, orientation, normals correct](images/phase8-h2-kenney-imports-final.jpg)
+
+| Asset | Target height | Spawn | refPath |
+|-------|---------------|-------|---------|
+| `SM_GrokKenneyBench_90cm_UE` | 90 cm (Z) | `GrokKenneyBench` (300,200,0) | `...StaticMeshActor_UAID_D8BBC1098290C2E602_1178606529` |
+| `SM_GrokKenneyBear_60cm_UE` | 60 cm (Z) | `GrokKenneyBear` (500,200,0) | `...StaticMeshActor_UAID_D8BBC1098290C2E602_1167078528` |
 
 ## Done — do not re-run
 
 | Batch | Items |
 |-------|-------|
-| H1 | Full pipeline + PIE — screenshot `Docs/images/phase8-h1-pie-datatable-prints.jpg` |
+| H1 | Material + DT + BP + PIE — `Docs/images/phase8-h1-pie-datatable-prints.jpg` |
+| H2 | Kenney web import — scaler + `import_file` + spawn; regression screenshots in `Docs/images/phase8-h2-*` |
 
-**Assets:** `M_GrokPhase8`, `MF_GrokPhase8`, `M_GrokPhase8_Inst`, `DT_GrokPhase8_Strings`, `BP_GrokPhase8`
-
-**Spawned actor:** `GrokPhase8Actor` — refPath in NOTES.md § Phase 8
+**Assets:** `M_GrokPhase8`, `MF_GrokPhase8`, `M_GrokPhase8_Inst`, `DT_GrokPhase8_Strings`, `BP_GrokPhase8`, `SM_GrokKenneyBench_90cm_UE`, `SM_GrokKenneyBear_60cm_UE`

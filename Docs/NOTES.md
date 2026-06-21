@@ -1,7 +1,7 @@
 # GrokUE_MCP — Integration Notes
 
-**Last updated:** 2026-06-20  
-**Current phase:** Phase 8 Batch H1 **complete**. **Resume:** `Docs/PHASE8_PROGRESS.md` (optional: save `L_Grok`, next integration target TBD)
+**Last updated:** 2026-06-21  
+**Current phase:** Phase 8 **complete** (H1 + H2). **Resume:** `Docs/PHASE8_PROGRESS.md` — Phase 2 = geo heightmap landscape
 
 This file records what we verified, what failed, and answers to open questions from [PLAN.md](PLAN.md). Update it as each phase completes.
 
@@ -64,7 +64,7 @@ To add more project tools, edit `project_tools.py`, restart the editor, then `Mo
 | Custom tool authoring rules | `@unreal.ustruct()` for struct returns — **not** `@dataclass` (see Phase 5 hitch below) |
 | Gameplay / content | `Content/` (blank today) |
 | CI / headless MCP | `Docs/PLAN.md` Phase 5 — `-ModelContextProtocolStartServer` (not started) |
-| **Phase 8 — integrated logic** | **`Docs/PHASE8_PROGRESS.md`** — H1 complete; screenshot in `Docs/images/` |
+| **Phase 8 — integrated logic + web mesh import** | **`Docs/PHASE8_PROGRESS.md`** — H1+H2 complete; `ImportedAssets/scripts/scale_obj_to_ue_cm.py` |
 | Phase 7 results (archive) | **`Docs/PHASE7_PROGRESS.md`** — do not re-run completed batches |
 
 ### 4. Key repo paths
@@ -99,11 +99,11 @@ F:\git\GrokUE_MCP\
 | 5 — Grow capabilities | **Pass** | 2026-06-20 | 20 toolsets; `health_check` live-verified from fresh Grok session |
 | 6 — Multi-client regression | **Pass** | 2026-06-20 | Cursor IDE agent: read + write tests; `grok mcp doctor` healthy |
 | 7 — Expand toolset coverage | **Pass** | 2026-06-20 | All 19 Epic toolsets cataloged/probed (Batches F–AG); `L_Grok` + `/Game/MCPTest/`; see Phase 7 summary |
-| 8 — Integrated content pipeline | **H1 Pass** | 2026-06-20 | Full MCP chain + PIE prints; screenshot `images/phase8-h1-pie-datatable-prints.jpg` |
+| 8 — Integrated content pipeline | **Pass** | 2026-06-21 | H1 PIE chain + H2 Kenney `import_file` + `--kenney-ue` scaler; final screenshot `phase8-h2-kenney-imports-final.jpg` |
 
 ---
 
-## Phase 8 — Integrated Content Pipeline (Batch H1 Complete)
+## Phase 8 — Integrated Content Pipeline (Complete)
 
 **Goal:** Chain MCP tools to build content with logic — material stack + DataTable + Blueprint `write_graph_dsl` + spawned actor. See `Docs/PHASE8_PLAN.md`.
 
@@ -128,6 +128,131 @@ F:\git\GrokUE_MCP\
 **Note:** Struct field `.mirroredName` not supported in DSL expressions; used `DataTable|GetDataTableColumnasString` instead.
 
 **New toolsets probed in H1:** `MaterialTools` expression graph, `MaterialInstanceTools.set_scalar_parameter`, `PrimitiveTools.add_cube`, `BlueprintTools.write_graph_dsl`.
+
+### Batch H2 — Kenney FBX import + spawn (verified 2026-06-21)
+
+| # | Step | Result |
+|---|------|--------|
+| H2a | Download [Kenney Furniture Kit](https://kenney.nl/assets/furniture-kit) (CC0) | **Pass** — extracted to `ImportedAssets/kenney_furniture-kit/` |
+| H2b | `StaticMeshTools.import_file` `bench.fbx` → `SM_GrokKenneyBench` | **Pass** — first `import_file` probe; no bundled materials |
+| H2c | `save_assets` | **Pass** |
+| H2d | `get_triangle_count` / `get_bounds` / `get_material_slots` | **Pass** — 163 tris; AABB ~4×2×4.7 uu; slot `wood` |
+| H2e | `SceneTools.add_to_scene_from_asset` `GrokKenneyBench` | **Pass** — location (300,200,0), yaw 45°, **scale 100** |
+| H2f | `StaticMeshTools.set_material` `wood` → `M_GrokPhase8_Inst` | **Pass** |
+| H2g | `FocusOnActors` | **Pass** |
+| H2h | User viewport confirm | **Pass** — orange bench at (300,200,0) |
+
+![Batch H2 — Kenney bench import with M_GrokPhase8_Inst](images/phase8-h2-kenney-bench-import.jpg)
+
+*User-confirmed 2026-06-21: `GrokKenneyBench` with `SM_GrokKenneyBench`, Phase 8 orange material, Content Browser `/Game/MCPTest/`.*
+
+**Source file:** `ImportedAssets/kenney_furniture-kit/Models/FBX format/bench.fbx`  
+**Spawn refPath:** `/Game/Maps/L_Grok.L_Grok:PersistentLevel.StaticMeshActor_UAID_D8BBC1098290C0E602_1361225170`
+
+**Hitch:** Kenney FBX mesh units import as meters-at-uu-scale; spawn with `scale: {x:100,y:100,z:100}` for ~human-sized props in UE cm.
+
+**Deferred (Phase 2):** Real-world DEM → heightmap → replace `Landscape` — no Landscape toolset in MCP yet.
+
+### Batch H2b — OBJ import + glTF hitch (verified 2026-06-21)
+
+| # | Step | Result |
+|---|------|--------|
+| H2b-a | Khronos `Duck.glb` `import_file` | **Fail** — `FbxFactory does not support ".glb" files. Allowed: ['fbx', 'obj']` |
+| H2b-b | Kenney `bear.obj` → `SM_GrokKenneyBear` | **Pass** — second format test |
+| H2b-c | Probes | **Pass** — 266 tris; slots `fur`, `wood`, `metalDark` |
+| H2b-d | Spawn `GrokKenneyBear` at (500,200,0), scale 100 | **Pass** |
+| H2b-e | All material slots → `M_GrokPhase8_Inst` | **Pass** |
+| H2b-f | User viewport confirm | **Pass** — level saved at actor scale 1 (tiny meshes) |
+
+**Spawn refPath:** `/Game/Maps/L_Grok.L_Grok:PersistentLevel.StaticMeshActor_UAID_D8BBC1098290C0E602_1575879171`
+
+**Takeaway:** `StaticMeshTools.import_file` routes through **FbxFactory** — **FBX and OBJ only**. glTF/GLB need offline conversion or a different import path (not exposed in MCP).
+
+### Scale hitch — imported size is unpredictable at actor scale 1
+
+![Actor scale 1 — Kenney imports are dollhouse-sized](images/phase8-h2-scale-1x-hitch.jpg)
+
+*User-confirmed 2026-06-21: `GrokKenneyBench` + `GrokKenneyBear` at **actor scale 1** are unusably small. Earlier spawns used **actor scale 100** as a workaround.*
+
+| Observation | Detail |
+|-------------|--------|
+| MCP `import_file` | No import-scale or target-bounds parameters — only path + material flags |
+| UE import rule | 1 file unit → 1 uu (centimeter) at actor scale 1 |
+| Kenney OBJ `bench` | File max extent **0.47** → **~0.47 cm** in UE without pre-scale |
+| Kenney FBX `bench` | `get_bounds` max extent **~4.7 uu** — **10× larger than OBJ** for the same asset |
+| Actor scale 100 | Workaround only; size still varies by format/source |
+
+**Bounds-targeted import at actor scale 1 (outside MCP, automatable pre-step):**
+
+1. You specify a target size, e.g. *"bench longest side = 150 cm"*.
+2. Run `ImportedAssets/scripts/scale_obj_to_ue_cm.py` on the source OBJ (or convert FBX → OBJ first).
+3. `import_file` the scaled OBJ → spawn with **scale 1**.
+4. Optional verify: `StaticMeshTools.get_bounds` — longest axis should match target cm.
+
+```powershell
+python ImportedAssets/scripts/scale_obj_to_ue_cm.py `
+  "ImportedAssets/kenney_furniture-kit/Models/OBJ format/bench.obj" `
+  "ImportedAssets/scaled/bench_150cm.obj" `
+  --target-max-cm 150
+```
+
+FBX does not have a zero-dependency scaler in-repo yet; prefer Kenney **OBJ** from the same pack, or add Blender/assimp in a later helper. A custom `GrokProjectTools.import_mesh_sized` wrapper could chain script + MCP later.
+
+**Kenney axis hitch:** OBJ assets use **Y-up**; Unreal uses **Z-up**. Without remapping, a correctly sized bench lies on its side (height along world Y).
+
+![Y-up import — bench facing the floor](images/phase8-h2c-bench-y-up-hitch.jpg)
+
+Use `--kenney-ue` on the scaler (Z-up **+X forward** + face-winding fix for inverted normals):
+
+```powershell
+python ImportedAssets/scripts/scale_obj_to_ue_cm.py `
+  "ImportedAssets/kenney_furniture-kit/Models/OBJ format/bench.obj" `
+  "ImportedAssets/scaled/bench_90cm_ue.obj" `
+  --target-max-cm 90 --kenney-ue
+```
+
+| Hitch | Cause | Fix |
+|-------|-------|-----|
+| Lying on side | Kenney **Y-up** | Remap to **Z-up** |
+| Inverted normals | Odd axis permutation flips winding | Reverse `f` face order |
+| Faces **+Y** not **+X** | Kenney forward is **+Z** | Remap includes Z→X forward |
+| Faces **backwards on +X** | Kenney forward lands mirrored | **+180° Z** in `kenney_to_ue` (vertex space) |
+
+![Z-up correct but facing +Y (pre --kenney-ue)](images/phase8-h2c-bench-zup-y-forward.jpg)
+
+Verified: `SM_GrokKenneyBench_90cm_UE` `get_bounds` → Z **0–90 cm**, X depth **0–38 cm** (forward), actor rotation **0**.
+
+![Bench correct — Kenney-UE pipeline](images/phase8-h2c-bench-kenney-ue-correct.jpg)
+
+### Batch H2d — Bear OBJ with same pipeline (2026-06-21)
+
+| # | Step | Result |
+|---|------|--------|
+| H2d-a | `bear.obj --report-only --kenney-ue` | **Pass** — Z tallest (0.45 uu); Kenney axes match bench |
+| H2d-b | `--target-max-cm 60 --kenney-ue` → import | **Pass** — `SM_GrokKenneyBear_60cm_UE` |
+| H2d-c | `get_bounds` | **Pass** — Z **0–60 cm**, X **0–33 cm** |
+| H2d-d | Spawn `GrokKenneyBear` rotation 0, scale 1 | **Pass** |
+| H2d-e | User viewport confirm | **Pass** — correct size/up; **backwards on +X** |
+| H2d-f | `--kenney-ue` +180° Z in vertex remap; re-import bear + bench | **Pass** — forward fix; normals unchanged (even rotation) |
+
+![Bear backwards on +X before Z180 fix](images/phase8-h2d-bear-backwards-x.jpg)
+
+**Note:** OBJ bear has one material slot (`bearMat`). `kenney_to_ue` now applies **180° Z** after axis remap so forward is not mirrored on X. Face winding reversal kept (odd permutation); Z180 does not re-invert.
+
+**Spawn refPath:** `/Game/Maps/L_Grok.L_Grok:PersistentLevel.StaticMeshActor_UAID_D8BBC1098290C2E602_1167078528`
+
+### Batch H2 — final (user confirmed 2026-06-21)
+
+| # | Step | Result |
+|---|------|--------|
+| H2-final | Bench 90 cm + bear 60 cm, `--kenney-ue`, rotation 0, scale 1 | **Pass** — size, Z-up, +X forward, normals OK |
+
+![Kenney bench + bear — Phase 8 H2 final](images/phase8-h2-kenney-imports-final.jpg)
+
+*User-confirmed 2026-06-21: `GrokKenneyBench` + `GrokKenneyBear` with `M_GrokPhase8_Inst`; level saved.*
+
+**Canonical assets:** `SM_GrokKenneyBench_90cm_UE`, `SM_GrokKenneyBear_60cm_UE`  
+**Scaler:** `ImportedAssets/scripts/scale_obj_to_ue_cm.py --kenney-ue --target-max-cm <N>`
 
 ---
 
@@ -746,6 +871,7 @@ Use the template in [PLAN.md](PLAN.md) for additional failures.
 
 | Date | Change |
 |------|--------|
+| 2026-06-21 | **Phase 8 complete** — H2 Kenney import pipeline + `scale_obj_to_ue_cm.py`; final screenshot `phase8-h2-kenney-imports-final.jpg` |
 | 2026-06-20 | **Phase 8 Batch H1 complete** — integrated pipeline + PIE screenshot `phase8-h1-pie-datatable-prints.jpg` |
 | 2026-06-20 | **Phase 7 complete** — all 19 Epic toolsets cataloged/probed; resume `PHASE8_PLAN.md` |
 | 2026-06-20 | Phase 7 Batch AG — Blueprint Primary Data Asset subclass + saveable instance |

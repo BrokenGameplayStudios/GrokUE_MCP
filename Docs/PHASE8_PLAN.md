@@ -1,6 +1,6 @@
 # Phase 8 — Integrated content creation (planned)
 
-**Status:** Batch H1 **complete** (2026-06-20) — checkpoint `Docs/PHASE8_PROGRESS.md`.
+**Status:** Phase 8 **complete** (2026-06-21) — H1 + H2; checkpoint `Docs/PHASE8_PROGRESS.md`.
 
 **Goal:** Prove MCP can chain asset types with **logic** — each step is basic alone; the full pipeline is the stress test.
 
@@ -28,12 +28,27 @@ Build a small vertical slice in `/Game/MCPTest/` on level `/Game/Maps/L_Grok`:
 | ObjectTools set/get properties | AG |
 | StringTable / DataTable string data | AD, AF |
 
+## Batch H2 — Web mesh import (complete 2026-06-21)
+
+1. Download CC0 mesh (Kenney Furniture Kit OBJ)
+2. `ImportedAssets/scripts/scale_obj_to_ue_cm.py --kenney-ue --target-max-cm <N>`
+3. `StaticMeshTools.import_file` (FBX/OBJ only; glTF fails)
+4. `set_material` + `add_to_scene_from_asset` at scale 1, rotation 0
+
+**Success criteria (H2 — met 2026-06-21):**
+
+- [x] `import_file` probed (FBX + OBJ; glTF/GLB rejected)
+- [x] Bounds-targeted size at actor scale 1 via pre-import scaler
+- [x] Kenney axis fixes: Z-up, +X forward, normals, 180° Z — see `Docs/NOTES.md` § Phase 8
+- [x] Final viewport — `Docs/images/phase8-h2-kenney-imports-final.jpg`
+
 ## Optional follow-ups
 
 | Item | Status |
 |------|--------|
-| Save `L_Grok` with `GrokPhase8Actor` | Optional — persist spawn in git |
-| `StartPIE` via MCP | Skipped — user PIE confirmed prints |
+| Save `L_Grok` spawns in git | User saves locally; `__ExternalActors__` gitignored |
+| `StartPIE` via MCP | Skipped — user PIE confirmed prints (H1) |
+| Phase 2 — DEM heightmap landscape | Planned — no Landscape MCP toolset |
 
 ## Suggested execution order (one MCP call at a time)
 
