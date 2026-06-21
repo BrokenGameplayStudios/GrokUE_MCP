@@ -81,8 +81,9 @@ Write-only: `add_cube`, `add_sphere`, `add_cylinder`, `add_cone` — adds mesh c
 |------|-------|
 | `get_graph_dsl_docs` | No blueprint needed — DSL grammar |
 | `create` | `folder_path`, `asset_name`, `asset_type.refPath` — then **`save_assets`**; use `/Game/MCPTest/` not `/Game/Developers/` (CB hides Developers) |
-| `get_parent` / `list_graphs` | `blueprint.refPath` |
-| `read_graph_dsl` / `write_graph_dsl` | Needs graph ref from `list_graphs` |
+| `get_parent` / `list_graphs` / `list_functions` | `blueprint.refPath` |
+| `get_graph` | `blueprint.refPath`, `graph_name` (e.g. `EventGraph`) |
+| `read_graph_dsl` / `write_graph_dsl` | `graph.refPath` from `get_graph` |
 
 ## Programmatic (`editor_toolset.toolsets.programmatic.ProgrammaticToolset`)
 
@@ -97,11 +98,17 @@ Graph editing for Materials/MaterialFunctions (22 tools). Needs `/Game` Material
 
 ## Texture (`editor_toolset.toolsets.texture.TextureTools`)
 
-`get_size`, `import_file` — catalog only.
+| Tool | Notes |
+|------|-------|
+| `get_size` | `texture.refPath` — e.g. WhiteSquareTexture → 32×32 |
+| `import_file` | Write — `folder_path`, `asset_name`, `source_file` |
 
 ## Data table (`editor_toolset.toolsets.data_table.DataTableTools`)
 
-`search_row_structs`, `create`, `list_rows`, `get_rows`, `set_rows`, etc. (10 tools) — catalog only.
+| Tool | Notes |
+|------|-------|
+| `search_row_structs` | `struct_name` — use `"*"` for all TableRowBase subclasses |
+| `create`, `list_rows`, `get_rows`, `set_rows` | Need existing DataTable asset |
 
 ## Agent skills (`ToolsetRegistry.AgentSkillToolset`)
 

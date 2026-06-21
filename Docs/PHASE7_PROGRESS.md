@@ -2,8 +2,8 @@
 
 **Resume here.** Read this file only to know what to run next. Full results live in `Docs/NOTES.md` § Phase 7.
 
-**Last probe:** 2026-06-20 (Cursor session) — `AssetTools.find_assets` scoped to new Blueprint  
-**Next probe:** Optional — `TextureTools.get_size`, `DataTableTools.search_row_structs`, graph-level Blueprint probes
+**Last probe:** 2026-06-20 — `BlueprintTools.read_graph_dsl` on `BP_GrokPhase7Test` EventGraph  
+**Next probe:** Phase 7 queue empty — optional deeper probes (Material graph, PIE, spawn from new BP)
 
 ## GrokProjectTools — no editor UI
 
@@ -139,10 +139,29 @@ Source: `Plugins/GrokUEMCPTools/Content/Python/grok_ue_mcp/toolsets/project_tool
 
 **Test asset:** `/Game/MCPTest/BP_GrokPhase7Test` — user-confirmed
 
+### Batch W — TextureTools read (verified 2026-06-20)
+
+| ID | Tool | Result |
+|----|------|--------|
+| W1 | `get_size` `/Engine/EngineResources/WhiteSquareTexture.WhiteSquareTexture` | Pass — 32×32 px |
+
+### Batch X — DataTableTools read (verified 2026-06-20)
+
+| ID | Tool | Result |
+|----|------|--------|
+| X1 | `search_row_structs` `struct_name: "*"` | Pass — 15 engine/plugin row structs (GameplayTag, UMG RichText, etc.) |
+
+### Batch Y — Blueprint graph read on `BP_GrokPhase7Test` (verified 2026-06-20)
+
+| ID | Tool | Result |
+|----|------|--------|
+| Y1 | `list_functions` | Pass — `UserConstructionScript` implemented |
+| Y2 | `get_graph` `EventGraph` | Pass — graph ref returned |
+| Y3 | `read_graph_dsl` EventGraph | Pass — default events (BeginPlay, BeginOverlap, Tick); omit full DSL in docs |
+
 ## Queue — run in order (one MCP call at a time)
 
-1. Optional: `TextureTools.get_size` on engine texture; `DataTableTools.search_row_structs`
-2. Optional: graph probes on `BP_GrokPhase7Test` (`read_graph_dsl`, `list_functions`)
+_Empty — optional follow-ups: Material graph probes, `StartPIE`, spawn `BP_GrokPhase7Test` in level._
 
 ## Skipped for now
 

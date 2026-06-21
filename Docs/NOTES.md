@@ -96,7 +96,7 @@ F:\git\GrokUE_MCP\
 | 4 — Repeatable workflow | **Pass** | 2026-06-20 | Daily startup/shutdown checklist adopted |
 | 5 — Grow capabilities | **Pass** | 2026-06-20 | 20 toolsets; `health_check` live-verified from fresh Grok session |
 | 6 — Multi-client regression | **Pass** | 2026-06-20 | Cursor IDE agent: read + write tests; `grok mcp doctor` healthy |
-| 7 — Expand toolset coverage | **In progress** | 2026-06-20 | Batches F–V; Blueprint write verified; resume `PHASE7_PROGRESS.md` |
+| 7 — Expand toolset coverage | **In progress** | 2026-06-20 | Batches F–Y; queue empty; resume `PHASE7_PROGRESS.md` for optional follow-ups |
 
 ---
 
@@ -196,6 +196,26 @@ Test actor: `PlayerStart` — refPath `/Temp/Untitled_1.Untitled_1:PersistentLev
 - For MCP test assets, use a normal content path like `/Game/MCPTest/`.
 
 **Test asset:** `/Game/MCPTest/BP_GrokPhase7Test` — user-confirmed in Content Browser and Blueprint editor (2026-06-20).
+
+### Batch W — TextureTools read (verified 2026-06-20)
+
+| # | Tool | Result |
+|---|------|--------|
+| W1 | `get_size` `/Engine/EngineResources/WhiteSquareTexture.WhiteSquareTexture` | **Pass** — 32×32 px |
+
+### Batch X — DataTableTools read (verified 2026-06-20)
+
+| # | Tool | Result |
+|---|------|--------|
+| X1 | `search_row_structs` `struct_name: "*"` | **Pass** — 15 row structs (GameplayTag, UMG RichText, MirrorTable, etc.) |
+
+### Batch Y — Blueprint graph read on `BP_GrokPhase7Test` (verified 2026-06-20)
+
+| # | Tool | Result |
+|---|------|--------|
+| Y1 | `list_functions` | **Pass** — `UserConstructionScript` implemented |
+| Y2 | `get_graph` `EventGraph` | **Pass** |
+| Y3 | `read_graph_dsl` EventGraph | **Pass** — default BeginPlay / BeginOverlap / Tick events (empty bodies) |
 
 ### Batch N — CaptureViewport (2026-06-20)
 
@@ -592,6 +612,7 @@ Use the template in [PLAN.md](PLAN.md) for additional failures.
 
 | Date | Change |
 |------|--------|
+| 2026-06-20 | Phase 7 Batches W–Y — TextureTools, DataTableTools, Blueprint graph read probes |
 | 2026-06-20 | Phase 7 Batch V screenshot — `BP_GrokPhase7Test` user-confirmed in `/Game/MCPTest/` |
 | 2026-06-20 | Phase 7 — Blueprint write test (`BP_GrokPhase7Test` in `/Game/Developers/`) |
 | 2026-06-20 | Phase 7 — StaticMesh read probes, CaptureViewport workaround, Material/Texture/DataTable/AgentSkill catalogs |
