@@ -96,7 +96,7 @@ F:\git\GrokUE_MCP\
 | 4 — Repeatable workflow | **Pass** | 2026-06-20 | Daily startup/shutdown checklist adopted |
 | 5 — Grow capabilities | **Pass** | 2026-06-20 | 20 toolsets; `health_check` live-verified from fresh Grok session |
 | 6 — Multi-client regression | **Pass** | 2026-06-20 | Cursor IDE agent: read + write tests; `grok mcp doctor` healthy |
-| 7 — Expand toolset coverage | **In progress** | 2026-06-20 | Batches F–U; `CaptureViewport` workaround; resume `PHASE7_PROGRESS.md` |
+| 7 — Expand toolset coverage | **In progress** | 2026-06-20 | Batches F–V; Blueprint write verified; resume `PHASE7_PROGRESS.md` |
 
 ---
 
@@ -170,11 +170,22 @@ Test actor: `PlayerStart` — refPath `/Temp/Untitled_1.Untitled_1:PersistentLev
 
 ### Batch M — BlueprintTools (verified 2026-06-20)
 
-**Tool catalog (40+ tools):** graph DSL (`read_graph_dsl`/`write_graph_dsl`), node graph editing, variables, functions/events, `create`, `compile_blueprint`, etc. **No `/Game` Blueprint assets yet** — graph-level probes deferred.
+**Tool catalog (40+ tools):** graph DSL (`read_graph_dsl`/`write_graph_dsl`), node graph editing, variables, functions/events, `create`, `compile_blueprint`, etc.
 
 | # | Tool | Result |
 |---|------|--------|
 | M1 | `get_graph_dsl_docs` | **Pass** — returns S-expression DSL grammar for `write_graph_dsl` |
+
+### Batch V — BlueprintTools write (verified 2026-06-20)
+
+| # | Tool | Arguments | Result |
+|---|------|-----------|--------|
+| V1 | `create` | `folder_path: /Game/Developers/`, `asset_name: BP_GrokPhase7Test`, `asset_type: /Script/Engine.Actor` | **Pass** — `/Game/Developers/BP_GrokPhase7Test.BP_GrokPhase7Test` |
+| V2 | `get_parent` | new Blueprint ref | **Pass** — parent `/Script/Engine.Actor` |
+| V3 | `list_graphs` | new Blueprint ref | **Pass** — `EventGraph`, `UserConstructionScript` |
+| V4 | `find_assets` | `folder_path: /Game/Developers/`, `name: BP_GrokPhase7Test` | **Pass** — `/Game/Developers/BP_GrokPhase7Test` |
+
+**Test asset created:** `BP_GrokPhase7Test` under `/Game/Developers/` — confirm in Content Browser. Graph-level probes (`read_graph_dsl`, `write_graph_dsl`) now unblocked.
 
 ### Batch N — CaptureViewport (2026-06-20)
 
@@ -569,6 +580,7 @@ Use the template in [PLAN.md](PLAN.md) for additional failures.
 
 | Date | Change |
 |------|--------|
+| 2026-06-20 | Phase 7 — Blueprint write test (`BP_GrokPhase7Test` in `/Game/Developers/`) |
 | 2026-06-20 | Phase 7 — StaticMesh read probes, CaptureViewport workaround, Material/Texture/DataTable/AgentSkill catalogs |
 | 2026-06-20 | Phase 7 — Batches J–O (Asset/Object/Blueprint/Programmatic); `CaptureViewport` hitch |
 | 2026-06-20 | **Phase 7 started** — `PHASE7_PROGRESS.md` checkpoint; Batches F–I; GrokProjectTools FAQ in handoff |

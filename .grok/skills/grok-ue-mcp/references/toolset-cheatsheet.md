@@ -79,8 +79,9 @@ Write-only: `add_cube`, `add_sphere`, `add_cylinder`, `add_cone` — adds mesh c
 | Tool | Notes |
 |------|-------|
 | `get_graph_dsl_docs` | No blueprint needed — DSL grammar |
-| `create` | Needs `/Game` folder + parent class — write test |
-| `read_graph_dsl` / `write_graph_dsl` | Needs existing Blueprint asset |
+| `create` | `folder_path`, `asset_name`, `asset_type.refPath` — e.g. Actor → `/Game/Developers/BP_GrokPhase7Test` |
+| `get_parent` / `list_graphs` | `blueprint.refPath` |
+| `read_graph_dsl` / `write_graph_dsl` | Needs graph ref from `list_graphs` |
 
 ## Programmatic (`editor_toolset.toolsets.programmatic.ProgrammaticToolset`)
 

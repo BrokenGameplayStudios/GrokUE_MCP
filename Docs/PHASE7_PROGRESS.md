@@ -2,8 +2,8 @@
 
 **Resume here.** Read this file only to know what to run next. Full results live in `Docs/NOTES.md` § Phase 7.
 
-**Last probe:** 2026-06-20 (Cursor session) — `AgentSkillToolset.ListSkills`  
-**Next probe:** `BlueprintTools.create` under `/Game/Developers/` — **needs user OK**
+**Last probe:** 2026-06-20 (Cursor session) — `AssetTools.find_assets` scoped to new Blueprint  
+**Next probe:** Optional — `TextureTools.get_size`, `DataTableTools.search_row_structs`, graph-level Blueprint probes
 
 ## GrokProjectTools — no editor UI
 
@@ -124,10 +124,21 @@ Source: `Plugins/GrokUEMCPTools/Content/Python/grok_ue_mcp/toolsets/project_tool
 |----|------|--------|
 | U1 | `ListSkills` | Pass — 4 built-in EditorToolset Python skills |
 
+### Batch V — BlueprintTools write (verified 2026-06-20)
+
+| ID | Tool | Result |
+|----|------|--------|
+| V1 | `create` `/Game/Developers/BP_GrokPhase7Test` parent `Actor` | Pass — refPath returned |
+| V2 | `get_parent` | Pass — `/Script/Engine.Actor` |
+| V3 | `list_graphs` | Pass — `EventGraph`, `UserConstructionScript` |
+| V4 | `find_assets` `/Game/Developers/` | Pass — asset discoverable |
+
+**Test asset:** `/Game/Developers/BP_GrokPhase7Test` — user can verify in Content Browser.
+
 ## Queue — run in order (one MCP call at a time)
 
-1. Blueprint write test — `BlueprintTools.create` under `/Game/Developers/` (needs user OK)
-2. Optional: `TextureTools.get_size` on a known engine texture; `DataTableTools.search_row_structs`
+1. Optional: `TextureTools.get_size` on engine texture; `DataTableTools.search_row_structs`
+2. Optional: graph probes on `BP_GrokPhase7Test` (`read_graph_dsl`, `list_functions`)
 
 ## Skipped for now
 
